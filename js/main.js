@@ -2,12 +2,31 @@
  * Created by Henry on 06.03.17.
  */
 !function () {
+    let symbol;
+
     $(document).ready(function () {
         $("#choose-symbol").css("display", "block");
+        $("#cross, #circle").click(function () {
+            chooseSymbol(this.id);
+        });
+
         $("#first-row, #second-row, #third-row").children().click(function () {
             fillInInput(this.id);
         });
     });
+
+    function chooseSymbol(selectedSymbol) {
+        switch (selectedSymbol) {
+            case "cross":
+                symbol = "fa fa-times";
+                break;
+
+            case "circle":
+                symbol = "fa fa-circle-o"
+                break;
+        }
+        $("#choose-symbol").hide("slow");
+    }
 
     function fillInInput(id) {
         id = "#" + id;
