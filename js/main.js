@@ -2,9 +2,16 @@
  * Created by Henry on 06.03.17.
  */
 !function () {
-    let symbol;
-    let player1 = [];
-    let player2 = [];
+    let isPlayer1 = true;
+
+    let player1 = {
+        symbol: undefined,
+        selectedFields: []
+    };
+    let player2 = {
+        symbol: undefined,
+        selectedFields: []
+    };
 
     $(document).ready(function () {
         $("#choose-symbol").css("display", "block");
@@ -17,19 +24,36 @@
         });
     });
 
+    // choose the selected symbol
     function chooseSymbol(selectedSymbol) {
+        const cross = "fa fa-times";
+        const circle = "fa fa-circle-o";
+        let isCross = false;
+
         switch (selectedSymbol) {
             case "cross":
-                symbol = "fa fa-times";
+                player1.symbol = cross;
+                isCross = true;
                 break;
 
             case "circle":
-                symbol = "fa fa-circle-o";
+                player1.symbol = circle;
                 break;
         }
+
+        // choose the opposite symbol of player1 for player2
+        if (cross) {
+            player2.symbol = circle;
+        }
+        else {
+            player2.symbol = cross;
+        }
+
+        // hide the symbol selecting screen
         $("#choose-symbol").hide("slow");
     }
 
+    // fills the input into the selected button and //ToDo:
     function fillInInput(id) { // ToDo: add it to the player array
         id = "#" + id;
 
@@ -38,6 +62,7 @@
         }
     }
 
+    // resets all fields and //ToDo:
     function resetGame() {
         const fields = ["#field-one", "#field-two", "#field-three", "#field-four", "#field-five",
             "#field-six", "#field-seven", "#field-eight", "#field-nine"];
