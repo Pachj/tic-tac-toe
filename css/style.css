@@ -1,3 +1,5 @@
+/*ToDo: @16:9/16:10 full height*/
+
 html {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -15,3 +17,19 @@ body {
     justify-content: center;
 }
 
+#game {
+    width: 312px;
+    height: 312px;
+}
+
+.game-field {
+    height: 100px;
+    width: 100px;
+
+    background-color: black;
+    border: 2px solid white;
+}
+
+i {
+    color: white;
+}
