@@ -1,7 +1,10 @@
 /**
  * Created by Henry on 06.03.17.
  */
+//ToDo: add 2 player mode
+//ToDo: change show()/hide() anchor
 !function () {
+    let singlePlayer = true; // actual only a placeholder
     let isPlayer1 = true;
 
     let player1 = {
@@ -88,17 +91,46 @@
 
         // iterate over all winning conditions
         for (let i = 0; i < winningConditions.length; i++) {
-            let regExp = new RegExp(winningConditions[i], "g");
+            let regExp = new RegExp(winningConditions[i], "g"); //FixMe: when the 3 digits not are side by side, it returns false
 
             // if the player has won --> finish the round
             if (regExp.test(actualPlayer.selectedFields.toString())) {
                 finishRound(actualPlayer);
             }
         }
+        // if all fields are filled --> end the round
+        if (player1.selectedFields.length + player2.selectedFields.length === 9) { //ToDo: ask beat for shorthand
+            finishRound();
+        }
     }
 
-    function finishRound() {
-        console.log(arguments);
+    function finishRound() { //ToDo: add resetGame()
+        // jQuery selector for the result screen
+        let resultScreen = $("#result-screen");
+        // shows the result screen
+        resultScreen.show("slow");
+
+        // if i have an argument
+        if (arguments) {
+            // if i play in singleplayer
+            if (singlePlayer) {
+                // if player1 has made the actual selection
+                if (isPlayer1) {
+                    resultScreen.children("h1").html("You are the Winner!");
+                }
+                // if the ai had made the actual selection
+                else {
+                    resultScreen("h1").html("You have lost!");
+                }
+            }
+        }
+        // if i don't have an argument --> display a draw
+        else {
+            resultScreen.children("h1").html("Nobody has won. It's a draw.")
+        }
+
+        // sets a timer until call resetGame so that the result screen is this duration long visible
+        window.setTimeout(resetGame, 3000); //ToDo: change duration //ToDo: possibly change position in code, so that the player can see how the symbols are disappearing
     }
 
     // resets the whole game
@@ -118,5 +150,7 @@
         player2.selectedFields = [];
 
         isPlayer1 = true;
+
+        $("#result-screen").hide("slow");
     }
 }();

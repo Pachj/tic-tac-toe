@@ -34,7 +34,7 @@ i {
     color: white;
 }
 
-#choose-symbol {
+.pop-in-screen {
     display: none;
     position: fixed;
     width: 100%;
