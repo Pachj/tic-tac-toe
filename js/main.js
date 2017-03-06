@@ -20,11 +20,12 @@
         });
 
         $("#first-row, #second-row, #third-row").children().click(function () {
-            fillInInput(this.id);
+            fillInInput(this.id, parseInt($(this).attr("value")));
         });
     });
 
-    // choose the selected symbol
+    /* choose the selected symbol for player1 and the opposite for player2
+    * @param the id of the selected button*/
     function chooseSymbol(selectedSymbol) {
         const cross = "fa fa-times";
         const circle = "fa fa-circle-o";
@@ -33,36 +34,53 @@
         switch (selectedSymbol) {
             case "cross":
                 player1.symbol = cross;
+                player2.symbol = circle;
                 isCross = true;
                 break;
 
             case "circle":
                 player1.symbol = circle;
+                player2.symbol = cross;
                 break;
-        }
-
-        // choose the opposite symbol of player1 for player2
-        if (cross) {
-            player2.symbol = circle;
-        }
-        else {
-            player2.symbol = cross;
         }
 
         // hide the symbol selecting screen
         $("#choose-symbol").hide("slow");
     }
 
-    // fills the input into the selected button and //ToDo:
-    function fillInInput(id) { // ToDo: add it to the player array
-        id = "#" + id;
+    /* add the value to the actualPlayers selectedFields Array and display the players symbol
+    * @param the id of the selected button
+    * @param the value of the selected button*/
+    function fillInInput(id, value) {
+        // select the actual player
+        function selectActualPlayer() {
+            if (isPlayer1) {
+                return player1;
+            }
+            return player2;
+        }
 
+        // the actual player
+        let actualPlayer = selectActualPlayer();
+
+        // push the value of the button to the selected field array of the actual player
+        actualPlayer.selectedFields.push(value);
+        // sort the selected fields array of the actual player
+        actualPlayer.selectedFields.sort();
+
+        id = "#" + id;
+        // display the symbol of the actual player in the selected button
         if ($(id).html().length === 0) {
-            $(id).html("<i class='" + symbol + "'></i>");
+            $(id).html("<i class='" + actualPlayer.symbol + "'></i>");
+        }
+
+        // if the actual player already has selected 3 or more fields --> check if he has won
+        if (actualPlayer.selectedFields.length >= 3) {
+            hasWon();
         }
     }
 
-    // resets all fields and //ToDo:
+    // resets all fields and //ToDo: finish comment
     function resetGame() {
         const fields = ["#field-one", "#field-two", "#field-three", "#field-four", "#field-five",
             "#field-six", "#field-seven", "#field-eight", "#field-nine"];
