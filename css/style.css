@@ -33,3 +33,13 @@ body {
 i {
     color: white;
 }
+
+#choose-symbol {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(9, 178, 203, 0.6);
+    top: 0;
+    left: 0;
+}

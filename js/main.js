@@ -3,6 +3,7 @@
  */
 !function () {
     $(document).ready(function () {
+        $("#choose-symbol").css("display", "block");
         $("#first-row, #second-row, #third-row").children().click(function () {
             fillInInput(this.id);
         });
