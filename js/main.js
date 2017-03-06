@@ -3,7 +3,8 @@
  */
 //ToDo: add 2 player mode
 //ToDo: change show()/hide() anchor
-!function () {
+//ToDo: Change the player for the first move
+!function () { // ToDo: name the function
     let singlePlayer = true; // actual only a placeholder
     let isPlayer1 = true;
 
@@ -81,6 +82,9 @@
         if (actualPlayer.selectedFields.length >= 3) {
             hasWon(actualPlayer);
         }
+
+        // change the player who make a move
+        isPlayer1 = !isPlayer1;
     }
 
     /* checks if the actual player has won
@@ -91,7 +95,11 @@
 
         // iterate over all winning conditions
         for (let i = 0; i < winningConditions.length; i++) {
-            let regExp = new RegExp(winningConditions[i], "g"); //FixMe: when the 3 digits not are side by side, it returns false
+            // build the regExp string with the values of the current winningConditions array
+            let actualWinningCondition = "^.*" + winningConditions[i][0] + ".*" + winningConditions[i][1] + ".*" +
+                winningConditions[i][2] + ".*$";
+            // create the regExp object
+            let regExp = new RegExp(actualWinningCondition, "g");
 
             // if the player has won --> finish the round
             if (regExp.test(actualPlayer.selectedFields.toString())) {
@@ -99,19 +107,19 @@
             }
         }
         // if all fields are filled --> end the round
-        if (player1.selectedFields.length + player2.selectedFields.length === 9) { //ToDo: ask beat for shorthand
+        if (player1.selectedFields.length + player2.selectedFields.length === 9) {
             finishRound();
         }
     }
 
-    function finishRound() { //ToDo: add resetGame()
+    function finishRound() {
         // jQuery selector for the result screen
         let resultScreen = $("#result-screen");
         // shows the result screen
         resultScreen.show("slow");
 
         // if i have an argument
-        if (arguments) {
+        if (arguments) { //FixMe: is winning but should be a draw
             // if i play in singleplayer
             if (singlePlayer) {
                 // if player1 has made the actual selection
