@@ -80,15 +80,23 @@
         }
     }
 
-    // resets all fields and //ToDo: finish comment
+    // resets the whole game
     function resetGame() {
+        // the id's of all game-buttons
         const fields = ["#field-one", "#field-two", "#field-three", "#field-four", "#field-five",
             "#field-six", "#field-seven", "#field-eight", "#field-nine"];
 
+        // reset the game-buttons
         for (let i = 0; i < fields.length; i++) {
             let field = fields[i];
             $(field).html("");
         }
+
+        // reset the selected fields //ToDo: needs to be tested
+        player1.selectedFields = [];
+        player2.selectedFields = [];
+
+        isPlayer1 = true;
     }
 
     function hasWon(person) {
