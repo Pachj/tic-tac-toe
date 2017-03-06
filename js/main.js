@@ -3,6 +3,8 @@
  */
 !function () {
     let symbol;
+    let player1 = [];
+    let player2 = [];
 
     $(document).ready(function () {
         $("#choose-symbol").css("display", "block");
@@ -28,7 +30,7 @@
         $("#choose-symbol").hide("slow");
     }
 
-    function fillInInput(id) {
+    function fillInInput(id) { // ToDo: add it to the player array
         id = "#" + id;
 
         if ($(id).html().length === 0) {
@@ -44,5 +46,9 @@
             let field = fields[i];
             $(field).html("");
         }
+    }
+
+    function hasWon(person) {
+        const winningConditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]];
     }
 }();
