@@ -22,7 +22,7 @@
                 break;
 
             case "circle":
-                symbol = "fa fa-circle-o"
+                symbol = "fa fa-circle-o";
                 break;
         }
         $("#choose-symbol").hide("slow");
@@ -32,7 +32,7 @@
         id = "#" + id;
 
         if ($(id).html().length === 0) {
-            $(id).html("<i class='fa fa-times'></i>");
+            $(id).html("<i class='" + symbol + "'></i>");
         }
     }
 
