@@ -25,7 +25,7 @@
     });
 
     /* choose the selected symbol for player1 and the opposite for player2
-    * @param the id of the selected button*/
+     * @param the id of the selected button*/
     function chooseSymbol(selectedSymbol) {
         const cross = "fa fa-times";
         const circle = "fa fa-circle-o";
@@ -49,8 +49,8 @@
     }
 
     /* add the value to the actualPlayers selectedFields Array and display the players symbol
-    * @param the id of the selected button
-    * @param the value of the selected button*/
+     * @param the id of the selected button
+     * @param the value of the selected button*/
     function fillInInput(id, value) {
         // select the actual player
         function selectActualPlayer() {
@@ -76,8 +76,29 @@
 
         // if the actual player already has selected 3 or more fields --> check if he has won
         if (actualPlayer.selectedFields.length >= 3) {
-            hasWon();
+            hasWon(actualPlayer);
         }
+    }
+
+    /* checks if the actual player has won
+     * @param the actual player*/
+    function hasWon(actualPlayer) {
+        // all winning conditions
+        const winningConditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]];
+
+        // iterate over all winning conditions
+        for (let i = 0; i < winningConditions.length; i++) {
+            let regExp = new RegExp(winningConditions[i], "g");
+
+            // if the player has won --> finish the round
+            if (regExp.test(actualPlayer.selectedFields.toString())) {
+                finishRound(actualPlayer);
+            }
+        }
+    }
+
+    function finishRound() {
+        console.log(arguments);
     }
 
     // resets the whole game
@@ -97,9 +118,5 @@
         player2.selectedFields = [];
 
         isPlayer1 = true;
-    }
-
-    function hasWon(person) {
-        const winningConditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]];
     }
 }();
