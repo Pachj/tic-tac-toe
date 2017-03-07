@@ -7,7 +7,7 @@
  * ToDo: import from ai.js
  */
 
-import { newAiMove } from './ai';
+import newAiMove from './ai';
 
 const singlePlayer = true; // actual only a placeholder
 // which player can make a move
