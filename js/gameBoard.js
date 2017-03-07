@@ -1,8 +1,11 @@
 /**
  * Created by Henry on 06.03.17.
  */
-// ToDo: add 2 player mode
-// ToDo: change show()/hide() anchor
+
+/** ToDo: add 2 player mode
+ * ToDo: change show()/hide() anchor
+ * ToDo: import from ai.js
+ */
 
 const singlePlayer = true; // actual only a placeholder
 // which player can make a move
@@ -29,7 +32,7 @@ function chooseSymbol(selectedSymbol) {
   const cross = 'fa fa-times';
   const circle = 'fa fa-circle-o';
 
-  if (selectedSymbol === 'cross') { // ToDo: needs to be refactored to if/else
+  if (selectedSymbol === 'cross') {
     player1.symbol = cross;
     player2.symbol = circle;
   } else if (selectedSymbol === 'circle') {
