@@ -1,165 +1,203 @@
 /**
  * Created by Henry on 06.03.17.
  */
-//ToDo: add 2 player mode
-//ToDo: change show()/hide() anchor
-//ToDo: Change the player for the first move
-!function gameBoard() { // ToDo: perhaps delete it again (name the function)
-    let singlePlayer = true; // actual only a placeholder
-    let isPlayer1 = true;
 
-    let player1 = {
-        symbol: undefined,
-        selectedFields: []
-    };
-    let player2 = {
-        symbol: undefined,
-        selectedFields: []
-    };
+/** ToDo: add 2 player mode
+ * ToDo: change show()/hide() anchor
+ * ToDo: import from ai.js
+ */
 
-    $(document).ready(function () {
-        $("#choose-symbol").css("display", "block");
-        $("#cross, #circle").click(function () {
-            chooseSymbol(this.id);
-        });
+const singlePlayer = true; // actual only a placeholder
+// which player can make a move
+let isPlayer1 = true;
+// which player can make the first move in the round
+let player1HasFirstMove = true;
+// all fields who not already has been selected
+let notUsedFields = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-        $("#first-row, #second-row, #third-row").children().click(function () {
-            fillInInput(this.id, parseInt($(this).attr("value")));
-        });
-    });
+// the player
+const player1 = {
+  symbol: undefined,
+  selectedFields: [],
+};
+// the second player or the AI
+const player2 = {
+  symbol: undefined,
+  selectedFields: [],
+};
 
-    /* choose the selected symbol for player1 and the opposite for player2
-     * @param the id of the selected button*/
-    function chooseSymbol(selectedSymbol) {
-        const cross = "fa fa-times";
-        const circle = "fa fa-circle-o";
-        let isCross = false;
+/** choose the selected symbol for player1 and the opposite for player2
+ * @param {String} selectedSymbol - the id of the selected button*/
+function chooseSymbol(selectedSymbol) {
+  const cross = 'fa fa-times';
+  const circle = 'fa fa-circle-o';
 
-        switch (selectedSymbol) {
-            case "cross":
-                player1.symbol = cross;
-                player2.symbol = circle;
-                isCross = true;
-                break;
+  if (selectedSymbol === 'cross') {
+    player1.symbol = cross;
+    player2.symbol = circle;
+  } else if (selectedSymbol === 'circle') {
+    player1.symbol = circle;
+    player2.symbol = cross;
+  }
 
-            case "circle":
-                player1.symbol = circle;
-                player2.symbol = cross;
-                break;
-        }
+  // hide the symbol selecting screen
+  $('#choose-symbol').hide('slow');
+}
 
-        // hide the symbol selecting screen
-        $("#choose-symbol").hide("slow");
+/** add the value to the actualPlayers selectedFields Array and display the players symbol
+ * @param {String} id - the id of the selected field
+ * @param {Number} value - the value of the selected field
+ * @param {Object} actualPlayer - the actual player*/
+function fillInInput(id, value, actualPlayer) {
+  // push the value of the button to the selected field array of the actual player
+  actualPlayer.selectedFields.push(value);
+  // sort the selected fields array of the actual player
+  actualPlayer.selectedFields.sort();
+
+  const actualId = `#${id}`;
+  // display the symbol of the actual player in the selected button
+  if ($(actualId).html().length === 0) { // ToDo: needs to be refactored
+    $(actualId).html(`<i class='${actualPlayer.symbol}'></i>`);
+  }
+
+  // removes the actual input from the not used fields
+  function removeFromNotUsed() {
+    const index = notUsedFields.indexOf(value);
+    notUsedFields.splice(index, 1);
+  }
+
+  removeFromNotUsed();
+}
+
+/** checks if the actual player has won
+ * @param {Object} actualPlayer - the actual player
+ * @return {Boolean} - if the player has won*/
+function hasWon(actualPlayer) {
+  // all winning conditions
+  const winningConditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9],
+    [1, 5, 9], [3, 5, 7]];
+
+  // iterate over all winning conditions
+  for (let i = 0; i < winningConditions.length; i += 1) {
+    // build the regExp string with the values of the current winningConditions array
+    const actualWinningCondition = `^.*${winningConditions[i][0]}.*${winningConditions[i][1]}.*${
+      winningConditions[i][2]}.*$`;
+    // create the regExp object
+    const regExp = new RegExp(actualWinningCondition, 'g');
+
+    // if the player has won --> finish the round
+    if (regExp.test(actualPlayer.selectedFields.toString())) {
+      return true;
     }
+  }
+  return false;
+}
 
-    /* add the value to the actualPlayers selectedFields Array and display the players symbol
-     * @param the id of the selected button
-     * @param the value of the selected button*/
-    function fillInInput(id, value) {
-        // select the actual player
-        function selectActualPlayer() {
-            if (isPlayer1) {
-                return player1;
-            }
-            return player2;
-        }
+function finishRound() {
+  // jQuery selector for the result screen
+  const resultScreen = $('#result-screen');
+  // shows the result screen
+  resultScreen.show('slow');
 
-        // the actual player
-        let actualPlayer = selectActualPlayer();
-
-        // push the value of the button to the selected field array of the actual player
-        actualPlayer.selectedFields.push(value);
-        // sort the selected fields array of the actual player
-        actualPlayer.selectedFields.sort();
-
-        id = "#" + id;
-        // display the symbol of the actual player in the selected button
-        if ($(id).html().length === 0) {
-            $(id).html("<i class='" + actualPlayer.symbol + "'></i>");
-        }
-
-        // if the actual player already has selected 3 or more fields --> check if he has won
-        if (actualPlayer.selectedFields.length >= 3) {
-            hasWon(actualPlayer);
-        }
-
-        // change the player who make a move
-        isPlayer1 = !isPlayer1;
+  /** if i have a winner
+   * else --> it's a draw*/
+  if (arguments.length === 1) {
+    // if i play in singleplayer
+    if (singlePlayer) {
+      // if player1 has made the actual selection
+      if (isPlayer1) {
+        resultScreen.children('h1').html('You are the Winner!');
+      } else {
+        resultScreen.children('h1').html('You have lost!');
+      }
     }
+  } else {
+    // display a draw
+    resultScreen.children('h1').html("Nobody has won. It's a draw.");
+  }
+}
 
-    /* checks if the actual player has won
-     * @param the actual player*/
-    function hasWon(actualPlayer) {
-        // all winning conditions
-        const winningConditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]];
+// resets the whole game
+function resetGame() {
+  // the id's of all game-buttons
+  const fields = ['#field-one', '#field-two', '#field-three', '#field-four', '#field-five',
+    '#field-six', '#field-seven', '#field-eight', '#field-nine'];
 
-        // iterate over all winning conditions
-        for (let i = 0; i < winningConditions.length; i++) {
-            // build the regExp string with the values of the current winningConditions array
-            let actualWinningCondition = "^.*" + winningConditions[i][0] + ".*" + winningConditions[i][1] + ".*" +
-                winningConditions[i][2] + ".*$";
-            // create the regExp object
-            let regExp = new RegExp(actualWinningCondition, "g");
+  // reset the game-buttons
+  for (let i = 0; i < fields.length; i += 1) {
+    const field = fields[i];
+    $(field).html('');
+  }
 
-            // if the player has won --> finish the round
-            if (regExp.test(actualPlayer.selectedFields.toString())) {
-                finishRound(actualPlayer);
-            }
-        }
-        // if all fields are filled --> end the round
-        if (player1.selectedFields.length + player2.selectedFields.length === 9) {
-            finishRound();
-        }
+  // reset the selected fields
+  player1.selectedFields = [];
+  player2.selectedFields = [];
+
+  // reset the not used fields
+  notUsedFields = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+  // change the player with the first move for the next round
+  player1HasFirstMove = !player1HasFirstMove;
+  isPlayer1 = player1HasFirstMove;
+
+  // hide the result screen
+  $('#result-screen').hide('slow');
+}
+
+/**
+ * controls the whole game functionality
+ * @param {String} id - the id of the field who has been selected
+ * @param {Number} value - the value of the field who has been selected
+ */
+function gameController(id, value) {
+  /**
+   * selects the actual player
+   * @return {Object} - the actual player*/
+  function selectActualPlayer() {
+    if (isPlayer1) {
+      return player1;
     }
+    return player2;
+  }
 
-    function finishRound() {
-        // jQuery selector for the result screen
-        let resultScreen = $("#result-screen");
-        // shows the result screen
-        resultScreen.show("slow");
+  // the actual player
+  const actualPlayer = selectActualPlayer();
 
-        console.log(arguments + arguments[0]);
-        // if i have an argument
-        if (arguments.length === 1) {
-            // if i play in singleplayer
-            if (singlePlayer) {
-                // if player1 has made the actual selection
-                if (isPlayer1) {
-                    resultScreen.children("h1").html("You are the Winner!");
-                }
-                // if the ai had made the actual selection
-                else {
-                    resultScreen("h1").html("You have lost!");
-                }
-            }
-        }
-        // if i don't have an argument --> display a draw
-        else {
-            resultScreen.children("h1").html("Nobody has won. It's a draw.")
-        }
+  /** if the field isn't already used --> fill in the input
+   * else --> change the player for the next move*/
+  if (notUsedFields.indexOf(value) !== -1) {
+    // fill in the input
+    fillInInput(id, value, actualPlayer);
 
-        // sets a timer until call resetGame so that the result screen is this duration long visible
-        window.setTimeout(resetGame, 3000); //ToDo: change duration //ToDo: possibly change position in code, so that the player can see how the symbols are disappearing
+    /** if the actual player has won --> end the round
+     * else if all fields are filled --> end the round*/
+    if (hasWon(actualPlayer)) {
+      finishRound(actualPlayer);
+      window.setTimeout(resetGame, 3000);
+    } else if (player1.selectedFields.length + player2.selectedFields.length === 9) {
+      finishRound();
+      window.setTimeout(resetGame, 3000);
+    } else {
+      isPlayer1 = !isPlayer1;
     }
+  }
+}
 
-    // resets the whole game
-    function resetGame() {
-        // the id's of all game-buttons
-        const fields = ["#field-one", "#field-two", "#field-three", "#field-four", "#field-five",
-            "#field-six", "#field-seven", "#field-eight", "#field-nine"];
+$(document).ready(() => {
+  $('#choose-symbol').css('display', 'block');
+  $('#cross, #circle').click(function () {
+    chooseSymbol(this.id);
+  });
 
-        // reset the game-buttons
-        for (let i = 0; i < fields.length; i++) {
-            let field = fields[i];
-            $(field).html("");
-        }
+  $('.game-field').click(function () { // ToDo: needs to be tested
+    // jQuery selector for the game-field buttons
+    const buttonSelector = $('.game-field');
+    // disable click events on the game-fields
+    buttonSelector.css('pointer-events', 'none');
 
-        // reset the selected fields //ToDo: needs to be tested
-        player1.selectedFields = [];
-        player2.selectedFields = [];
+    gameController(this.id, parseInt($(this).attr('value'), 10));
 
-        isPlayer1 = true;
-
-        $("#result-screen").hide("slow");
-    }
-}();
+    // enable click events on the game-fields
+    buttonSelector.css('pointer-events', 'auto');
+  });
+});

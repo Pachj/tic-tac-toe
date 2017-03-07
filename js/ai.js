@@ -1,6 +1,8 @@
 /**
  * Created by Henry on 07.03.17.
  */
-!function () {
+function newAiMove() {
 
-}();
+}
+
+export default newAiMove();
