@@ -7,6 +7,8 @@
 !function gameBoard() { // ToDo: perhaps delete it again (name the function)
     let singlePlayer = true; // actual only a placeholder
     let isPlayer1 = true;
+    let player1HasFirstMove = true;
+
 
     let player1 = {
         symbol: undefined,
@@ -24,7 +26,7 @@
         });
 
         $("#first-row, #second-row, #third-row").children().click(function () {
-            fillInInput(this.id, parseInt($(this).attr("value")));
+            gameController(this.id, parseInt($(this).attr("value")));
         });
     });
 
@@ -52,10 +54,7 @@
         $("#choose-symbol").hide("slow");
     }
 
-    /* add the value to the actualPlayers selectedFields Array and display the players symbol
-     * @param the id of the selected button
-     * @param the value of the selected button*/
-    function fillInInput(id, value) {
+    function gameController(id, value) { //ToDo: change actual player // ToDo: new comments
         // select the actual player
         function selectActualPlayer() {
             if (isPlayer1) {
@@ -67,6 +66,28 @@
         // the actual player
         let actualPlayer = selectActualPlayer();
 
+        fillInInput(id, value, actualPlayer);
+
+        // if the actual player already has selected 3 or more fields --> check if he has won
+        if (hasWon(actualPlayer)) {
+            finishRound(actualPlayer);
+            window.setTimeout(resetGame, 3000);
+        }
+        // if all fields are filled --> end the round
+        else if (player1.selectedFields.length + player2.selectedFields.length === 9) {
+            finishRound();
+            window.setTimeout(resetGame, 3000);
+        }
+
+        else {
+            isPlayer1 = !isPlayer1;
+        }
+    }
+
+    /* add the value to the actualPlayers selectedFields Array and display the players symbol
+     * @param the id of the selected button
+     * @param the value of the selected button*/
+    function fillInInput(id, value, actualPlayer) { // ToDo: new comments
         // push the value of the button to the selected field array of the actual player
         actualPlayer.selectedFields.push(value);
         // sort the selected fields array of the actual player
@@ -77,19 +98,11 @@
         if ($(id).html().length === 0) {
             $(id).html("<i class='" + actualPlayer.symbol + "'></i>");
         }
-
-        // if the actual player already has selected 3 or more fields --> check if he has won
-        if (actualPlayer.selectedFields.length >= 3) {
-            hasWon(actualPlayer);
-        }
-
-        // change the player who make a move
-        isPlayer1 = !isPlayer1;
     }
 
     /* checks if the actual player has won
      * @param the actual player*/
-    function hasWon(actualPlayer) {
+    function hasWon(actualPlayer) { //ToDo: new comments
         // all winning conditions
         const winningConditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]];
 
@@ -103,13 +116,10 @@
 
             // if the player has won --> finish the round
             if (regExp.test(actualPlayer.selectedFields.toString())) {
-                finishRound(actualPlayer);
+                return true
             }
         }
-        // if all fields are filled --> end the round
-        if (player1.selectedFields.length + player2.selectedFields.length === 9) {
-            finishRound();
-        }
+        return false;
     }
 
     function finishRound() {
@@ -137,9 +147,6 @@
         else {
             resultScreen.children("h1").html("Nobody has won. It's a draw.")
         }
-
-        // sets a timer until call resetGame so that the result screen is this duration long visible
-        window.setTimeout(resetGame, 3000); //ToDo: change duration //ToDo: possibly change position in code, so that the player can see how the symbols are disappearing
     }
 
     // resets the whole game
@@ -158,7 +165,8 @@
         player1.selectedFields = [];
         player2.selectedFields = [];
 
-        isPlayer1 = true;
+        player1HasFirstMove = !player1HasFirstMove;
+        isPlayer1 = player1HasFirstMove;
 
         $("#result-screen").hide("slow");
     }
