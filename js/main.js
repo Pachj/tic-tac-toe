@@ -4,7 +4,7 @@
 //ToDo: add 2 player mode
 //ToDo: change show()/hide() anchor
 //ToDo: Change the player for the first move
-!function () { // ToDo: name the function
+!function gameBoard() { // ToDo: perhaps delete it again (name the function)
     let singlePlayer = true; // actual only a placeholder
     let isPlayer1 = true;
 
