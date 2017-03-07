@@ -25,8 +25,16 @@
             chooseSymbol(this.id);
         });
 
-        $("#first-row, #second-row, #third-row").children().click(function () {
+        $(".game-field").click(function () { //ToDo: needs to be tested
+            // jQuery selector for the game-field buttons
+            let buttonSelector = $(".game-field");
+            // disable click events on the game-fields
+            buttonSelector.css("pointer-events", "none");
+
             gameController(this.id, parseInt($(this).attr("value")));
+
+            // enable click events on the game-fields
+            buttonSelector.css("pointer-events", "auto");
         });
     });
 
@@ -62,13 +70,13 @@
             }
             return player2;
         }
-
         // the actual player
         let actualPlayer = selectActualPlayer();
 
+        // fill in the input
         fillInInput(id, value, actualPlayer);
 
-        // if the actual player already has selected 3 or more fields --> check if he has won
+        // check if the actual player has won
         if (hasWon(actualPlayer)) {
             finishRound(actualPlayer);
             window.setTimeout(resetGame, 3000);
@@ -78,7 +86,7 @@
             finishRound();
             window.setTimeout(resetGame, 3000);
         }
-
+        // change the player for the next move
         else {
             isPlayer1 = !isPlayer1;
         }
