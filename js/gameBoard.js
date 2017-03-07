@@ -8,6 +8,7 @@
     let singlePlayer = true; // actual only a placeholder
     let isPlayer1 = true;
     let player1HasFirstMove = true;
+    let notUsedFields = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 
     let player1 = {
@@ -63,32 +64,35 @@
     }
 
     function gameController(id, value) { //ToDo: change actual player // ToDo: new comments
+        // the actual player
+        let actualPlayer = selectActualPlayer();
+
+        if (notUsedFields.indexOf(value) !== -1) {
+            // fill in the input
+            fillInInput(id, value, actualPlayer);
+
+            // check if the actual player has won
+            if (hasWon(actualPlayer)) {
+                finishRound(actualPlayer);
+                window.setTimeout(resetGame, 3000);
+            }
+            // if all fields are filled --> end the round
+            else if (player1.selectedFields.length + player2.selectedFields.length === 9) {
+                finishRound();
+                window.setTimeout(resetGame, 3000);
+            }
+            // change the player for the next move
+            else {
+                isPlayer1 = !isPlayer1;
+            }
+        }
+
         // select the actual player
         function selectActualPlayer() {
             if (isPlayer1) {
                 return player1;
             }
             return player2;
-        }
-        // the actual player
-        let actualPlayer = selectActualPlayer();
-
-        // fill in the input
-        fillInInput(id, value, actualPlayer);
-
-        // check if the actual player has won
-        if (hasWon(actualPlayer)) {
-            finishRound(actualPlayer);
-            window.setTimeout(resetGame, 3000);
-        }
-        // if all fields are filled --> end the round
-        else if (player1.selectedFields.length + player2.selectedFields.length === 9) {
-            finishRound();
-            window.setTimeout(resetGame, 3000);
-        }
-        // change the player for the next move
-        else {
-            isPlayer1 = !isPlayer1;
         }
     }
 
@@ -105,6 +109,13 @@
         // display the symbol of the actual player in the selected button
         if ($(id).html().length === 0) {
             $(id).html("<i class='" + actualPlayer.symbol + "'></i>");
+        }
+
+        removeFromNotUsed();
+
+        function removeFromNotUsed() {
+            let index = notUsedFields.indexOf(value);
+            notUsedFields.splice(index, 1);
         }
     }
 
@@ -136,7 +147,6 @@
         // shows the result screen
         resultScreen.show("slow");
 
-        console.log(arguments + arguments[0]);
         // if i have an argument
         if (arguments.length === 1) {
             // if i play in singleplayer
