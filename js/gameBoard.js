@@ -157,7 +157,7 @@
                 }
                 // if the ai had made the actual selection
                 else {
-                    resultScreen("h1").html("You have lost!");
+                    resultScreen.children("h1").html("You have lost!");
                 }
             }
         }
