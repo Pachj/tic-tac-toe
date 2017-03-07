@@ -7,6 +7,8 @@
  * ToDo: import from ai.js
  */
 
+import { newAiMove } from './ai';
+
 const singlePlayer = true; // actual only a placeholder
 // which player can make a move
 let isPlayer1 = true;
@@ -67,6 +69,10 @@ function fillInInput(id, value, actualPlayer) {
   }
 
   removeFromNotUsed();
+}
+
+function getNewAiMove() { // ToDo: comments
+  newAiMove(player1.selectedFields, player2.selectedFields, notUsedFields);
 }
 
 /** checks if the actual player has won
@@ -180,6 +186,11 @@ function gameController(id, value) {
     } else {
       isPlayer1 = !isPlayer1;
     }
+    if (singlePlayer) { // ToDo: comments //ToDo: needs other position
+      if (!isPlayer1) {
+        getNewAiMove();
+      }
+    }
   }
 }
 
@@ -190,14 +201,11 @@ $(document).ready(() => {
   });
 
   $('.game-field').click(function () { // ToDo: needs to be tested
-    // jQuery selector for the game-field buttons
-    const buttonSelector = $('.game-field');
-    // disable click events on the game-fields
-    buttonSelector.css('pointer-events', 'none');
-
-    gameController(this.id, parseInt($(this).attr('value'), 10));
-
-    // enable click events on the game-fields
-    buttonSelector.css('pointer-events', 'auto');
+    // block input if it is a singleplayer game and the AI can make a move
+    if (singlePlayer) {
+      if (isPlayer1) {
+        gameController(this.id, parseInt($(this).attr('value'), 10)); // ToDo: gameController must in an other way been called because if not the player has the first move, the AI cant move first.
+      }
+    }
   });
 });
