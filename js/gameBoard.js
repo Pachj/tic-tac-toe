@@ -4,6 +4,7 @@
 //ToDo: add 2 player mode
 //ToDo: change show()/hide() anchor
 //ToDo: Change the player for the first move
+//ToDo: sometimes buttons are not unlocked after end of game
 !function gameBoard() { // ToDo: perhaps delete it again (name the function)
     let singlePlayer = true; // actual only a placeholder
     let isPlayer1 = true;
@@ -179,13 +180,18 @@
             $(field).html("");
         }
 
-        // reset the selected fields //ToDo: needs to be tested
+        // reset the selected fields
         player1.selectedFields = [];
         player2.selectedFields = [];
 
+        //reset the not used fields
+        notUsedFields = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+        // change the player with the first move for the next round
         player1HasFirstMove = !player1HasFirstMove;
         isPlayer1 = player1HasFirstMove;
 
+        // hide the result screen
         $("#result-screen").hide("slow");
     }
 }();
