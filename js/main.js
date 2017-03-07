@@ -118,8 +118,9 @@
         // shows the result screen
         resultScreen.show("slow");
 
+        console.log(arguments + arguments[0]);
         // if i have an argument
-        if (arguments) { //FixMe: is winning but should be a draw
+        if (arguments.length === 1) {
             // if i play in singleplayer
             if (singlePlayer) {
                 // if player1 has made the actual selection
