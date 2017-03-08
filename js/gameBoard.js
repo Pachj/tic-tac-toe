@@ -55,7 +55,7 @@
     // push the value of the button to the selected field array of the actual player
     actualPlayer.selectedFields.push(value);
     // sort the selected fields array of the actual player
-    /*actualPlayer.selectedFields.sort();*/
+    /*actualPlayer.selectedFields.sort();*/ //FixMe: 1, 5, 9 (diagonal) didn't return true in the RegEx (7, 5, 9, 1), if the array isn't sorted
 
     const actualId = `#${id}`;
     // display the symbol of the actual player in the selected button
@@ -79,18 +79,18 @@
     // all winning conditions
     const winningConditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9],
       [1, 5, 9], [3, 5, 7]];
+    const sortedActualPlayer = actualPlayer.selectedFields.sort(); // FixMe: 1, 5, 9 (diagonal) didn't return true in the RegEx (7, 5, 9, 1), if the array isn't sorted
 
     // iterate over all winning conditions
     for (let i = 0; i < winningConditions.length; i += 1) {
       // build the regExp string with the values of the current winningConditions array
-      const actualWinningCondition = `^.*${winningConditions[i][0]}.*${winningConditions[i][1]}.*${ 
-        winningConditions[i][2]}.*$`; // FixMe: 1, 5, 9 (diagonal) didn't return true in the RegEx (7, 5, 9, 1)
+      const actualWinningCondition = `^.*${winningConditions[i][0]}.*${winningConditions[i][1]}.*${
+        winningConditions[i][2]}.*$`; // FixMe: 1, 5, 9 (diagonal) didn't return true in the RegEx (7, 5, 9, 1), if the array isn't sorted
       // create the regExp object
       const regExp = new RegExp(actualWinningCondition, 'g');
 
-      console.log(actualPlayer.selectedFields.toString());
       // if the player has won --> finish the round
-      if (regExp.test(actualPlayer.selectedFields.toString())) {
+      if (regExp.test(sortedActualPlayer.toString())) {
         return true;
       }
     }
