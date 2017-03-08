@@ -5,7 +5,6 @@
 /** ToDo: add 2 player mode
  * ToDo: change show()/hide() anchor
  * ToDo: import from ai.js
- * ToDo: add Babel File Watcher
  */
 
 /* import newAiMove from './ai';*/ // ToDo: other way for import
@@ -203,11 +202,8 @@
     });
 
     $('.game-field').click(function () { // ToDo: needs to be tested
-      // block input if it is a singleplayer game and the AI can make a move
       if (singlePlayer) {
-        if (isPlayer1) {
-          gameController(this.id, parseInt($(this).attr('value'), 10)); // ToDo: gameController must in an other way been called because if not the player has the first move, the AI cant move first.
-        }
+        gameController(this.id, parseInt($(this).attr('value'), 10)); // ToDo: gameController must in an other way been called because if not the player has the first move, the AI cant move first.
       }
     });
   });
@@ -272,5 +268,29 @@ function newAiMove(player1, player2, notUsedFields) { // ToDo: comments
 
   if (remainingFields === 9) {
     triggerNextMove(Math.floor(Math.random() * cornersAndCenter.length));
+  } else if (remainingFields === 8) {
+    if (player1[0] === 5) {
+      const bestPlays = [1, 3, 7, 9];
+      triggerNextMove(Math.floor(Math.random() * bestPlays.length));
+    } else if (player1[0] === 1 || player1[0] === 3 || player1[0] === 7 || player1[0] === 9) {
+      triggerNextMove(5);
+    } else {
+      const player1NewField = player1[0];
+      let nextPlay;
+      if (player1NewField === 2) {
+        const bestPlays = [1, 3];
+        nextPlay = bestPlays[Math.floor(Math.random() * bestPlays.length)];
+      } else if (player1NewField === 4) {
+        const bestPlays = [1, 7];
+        nextPlay = bestPlays[Math.floor(Math.random() * bestPlays.length)];
+      } else if (player1NewField === 6) {
+        const bestPlays = [3, 9];
+        nextPlay = bestPlays[Math.floor(Math.random() * bestPlays.length)];
+      } else if (player1NewField === 8) {
+        const bestPlays = [7, 9];
+        nextPlay = bestPlays[Math.floor(Math.random() * bestPlays.length)];
+      }
+      triggerNextMove(nextPlay);
+    }
   }
 }
