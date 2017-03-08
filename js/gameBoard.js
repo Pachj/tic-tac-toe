@@ -10,19 +10,19 @@
 /* import newAiMove from './ai';*/ // ToDo: other way for import
 (function () {
   const singlePlayer = true; // actual only a placeholder
-// which player can make a move
+  // which player can make a move
   let isPlayer1 = true;
-// which player can make the first move in the round
+  // which player can make the first move in the round
   let player1HasFirstMove = true;
-// all fields who not already has been selected
+  // all fields who not already has been selected
   let notUsedFields = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-// the player
+  // the player
   const player1 = {
     symbol: undefined,
     selectedFields: [],
   };
-// the second player or the AI
+  // the second player or the AI
   const player2 = {
     symbol: undefined,
     selectedFields: [],
@@ -73,7 +73,7 @@
   }
 
   function getNewAiMove() { // ToDo: comments
-    newAiMove(player1.selectedFields, player2.selectedFields, notUsedFields);
+    newAiMove(player1HasFirstMove, player1.selectedFields, player2.selectedFields, notUsedFields);
   }
 
   /** checks if the actual player has won
@@ -124,7 +124,7 @@
     }
   }
 
-// resets the whole game
+  // resets the whole game
   function resetGame() {
     // the id's of all game-buttons
     const fields = ['#field-one', '#field-two', '#field-three', '#field-four', '#field-five',
@@ -203,7 +203,7 @@
 
     $('.game-field').click(function () { // ToDo: needs to be tested
       if (singlePlayer) {
-        gameController(this.id, parseInt($(this).attr('value'), 10)); // ToDo: gameController must in an other way been called because if not the player has the first move, the AI cant move first.
+        gameController(this.id, parseInt($(this).attr('value'), 10)); // ToDo: instant call gameController in document.ready and then decide in the controller if wait for user input or ai.
       }
     });
   });
@@ -261,19 +261,25 @@ function triggerNextMove(selectedField) {
  * @param {Array} player2 - All fields of the AI
  * @param {Array} notUsedFields - All fields who aren't used *
  */
-function newAiMove(player1, player2, notUsedFields) { // ToDo: comments
-  const cornersAndCenter = [1, 3, 5, 7, 9];
-  const edges = [2, 4, 6, 8];
+function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) { // ToDo: comments
   const remainingFields = notUsedFields.length;
 
-  if (remainingFields === 9) {
+  // the first move in the whole round
+  function firstMove() { // ToDo: needs to be tested
+    const cornersAndCenter = [1, 3, 5, 7, 9];
     triggerNextMove(Math.floor(Math.random() * cornersAndCenter.length));
-  } else if (remainingFields === 8) {
+  }
+
+  // the second move in the whole round
+  function secondMove() {
+    // if the player selects the middle field
     if (player1[0] === 5) {
       const bestPlays = [1, 3, 7, 9];
       triggerNextMove(Math.floor(Math.random() * bestPlays.length));
+      // if the player selects one of the corners
     } else if (player1[0] === 1 || player1[0] === 3 || player1[0] === 7 || player1[0] === 9) {
       triggerNextMove(5);
+      // if the player selects one of the edges
     } else {
       const player1NewField = player1[0];
       let nextPlay;
@@ -293,4 +299,26 @@ function newAiMove(player1, player2, notUsedFields) { // ToDo: comments
       triggerNextMove(nextPlay);
     }
   }
+
+
+  function getTheNumberOfTheMove() {
+    let nextFunction;
+
+    switch (remainingFields) {
+      case 9: {
+        firstMove();
+        break;
+      }
+      case 8: {
+        secondMove();
+        break;
+      }
+      default: {
+        console.log('Fail!');
+        break;
+      }
+    }
+  }
+
+  getTheNumberOfTheMove();
 }
