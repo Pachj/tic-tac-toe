@@ -59,7 +59,7 @@
 
     const actualId = `#${id}`;
     // display the symbol of the actual player in the selected button
-    if ($(actualId).html().length === 0) { // ToDo: needs to be refactored
+    if ($(actualId).html().length === 0) { //ToDo: could be removed
       $(actualId).html(`<i class='${actualPlayer.symbol}'></i>`);
     }
 
@@ -70,10 +70,6 @@
     }
 
     removeFromNotUsed();
-  }
-
-  function getNewAiMove() { // ToDo: comments
-    newAiMove(player1HasFirstMove, player1.selectedFields, player2.selectedFields, notUsedFields);
   }
 
   /** checks if the actual player has won
@@ -151,6 +147,15 @@
     $('#result-screen').hide('slow');
   }
 
+  function inputController() { // ToDo: could be removed
+    if (arguments.length === 0 && !isPlayer1) {
+      let nextMove = newAiMove(player1HasFirstMove, player1.selectedFields, player2.selectedFields, notUsedFields);
+      gameController(nextMove[0], nextMove[1]);
+    } else if (arguments.length === 2 && isPlayer1) {
+      gameController(arguments[0], arguments[1]);
+    }
+  }
+
   /**
    * controls the whole game functionality
    * @param {String} id - the id of the field who has been selected
@@ -186,10 +191,9 @@
         window.setTimeout(resetGame, 3000);
       } else {
         isPlayer1 = !isPlayer1;
-      }
-      if (singlePlayer) { // ToDo: comments //ToDo: needs other position
+
         if (!isPlayer1) {
-          getNewAiMove();
+          inputController();
         }
       }
     }
@@ -199,86 +203,63 @@
     $('#choose-symbol').css('display', 'block');
     $('#cross, #circle').click(function () {
       chooseSymbol(this.id);
+
+      // if the ai can make the first move --> make first move
+      if (singlePlayer && notUsedFields.length === 9 && !isPlayer1) {
+        inputController();
+      }
     });
 
-    $('.game-field').click(function () { // ToDo: needs to be tested
-      if (singlePlayer) {
-        gameController(this.id, parseInt($(this).attr('value'), 10)); // ToDo: instant call gameController in document.ready and then decide in the controller if wait for user input or ai.
-      }
+    $('.game-field').click(function () {
+      inputController(this.id, parseInt($(this).attr('value'), 10));
     });
   });
 }());
-
-function triggerNextMove(selectedField) {
-  let trigger;
-  switch (selectedField) {
-    case 1: {
-      trigger = '#field-one';
-      break;
-    }
-    case 2: {
-      trigger = '#field-two';
-      break;
-    }
-    case 3: {
-      trigger = '#field-three';
-      break;
-    }
-    case 4: {
-      trigger = '#field-four';
-      break;
-    }
-    case 5: {
-      trigger = '#field-five';
-      break;
-    }
-    case 6: {
-      trigger = '#field-six';
-      break;
-    }
-    case 7: {
-      trigger = '#field-seven';
-      break;
-    }
-    case 8: {
-      trigger = '#field-eight';
-      break;
-    }
-    case 9: {
-      trigger = '#field-nine';
-      break;
-    }
-    default: {
-      console.log('ERROR! A NON EXPECTED VALUE HAS BEEN SELECTED!');
-      break;
-    }
-  }
-  $(trigger).trigger('click');
-}
 
 /**
  * @param {Array} player1 - All fields of the player
  * @param {Array} player2 - All fields of the AI
  * @param {Array} notUsedFields - All fields who aren't used *
  */
-function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) { // ToDo: comments
+function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) {
   const remainingFields = notUsedFields.length;
-
-  // the first move in the whole round
-  function firstMove() { // ToDo: needs to be tested
-    const cornersAndCenter = [1, 3, 5, 7, 9];
-    triggerNextMove(Math.floor(Math.random() * cornersAndCenter.length));
+/** gets the next move of the ai
+ * @return {Array} - array with the id and the value of the field of the next move
+ */
+  function getNextMove() {
+    switch (remainingFields) {
+      case 9: {
+        return firstMove();
+      }
+      case 8: {
+        return secondMove();
+      }
+      default: {
+        console.log('Fail!');
+        break;
+      }
+    }
   }
 
-  // the second move in the whole round
+  /**the first move in the whole round
+   * @return {Number} - the value of the field of the move
+   */
+  function firstMove() {
+    const cornersAndCenter = [1, 3, 5, 7, 9];
+    return getNextMoveParameters(Math.floor(Math.random() * cornersAndCenter.length));
+  }
+
+  /**the second move in the whole round
+   * @return {Number} - the value of the field of the move
+   */
   function secondMove() {
     // if the player selects the middle field
     if (player1[0] === 5) {
       const bestPlays = [1, 3, 7, 9];
-      triggerNextMove(Math.floor(Math.random() * bestPlays.length));
+      return getNextMoveParameters(Math.floor(Math.random() * bestPlays.length));
       // if the player selects one of the corners
     } else if (player1[0] === 1 || player1[0] === 3 || player1[0] === 7 || player1[0] === 9) {
-      triggerNextMove(5);
+      return getNextMoveParameters(5);
       // if the player selects one of the edges
     } else {
       const player1NewField = player1[0];
@@ -296,29 +277,48 @@ function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) { // To
         const bestPlays = [7, 9];
         nextPlay = bestPlays[Math.floor(Math.random() * bestPlays.length)];
       }
-      triggerNextMove(nextPlay);
+      return getNextMoveParameters(nextPlay);
     }
   }
 
-
-  function getTheNumberOfTheMove() {
-    let nextFunction;
-
-    switch (remainingFields) {
-      case 9: {
-        firstMove();
-        break;
+  /** returns an array with the id and the value of the next move
+   * @param {Number} selectedField - the value of the selected field
+   * @return {Array} - array with the id and the value of the field of next move
+   */
+  function getNextMoveParameters(selectedField) {
+    switch (selectedField) {
+      case 1: {
+        return ['field-one', selectedField];
+      }
+      case 2: {
+        return ['field-two', selectedField];
+      }
+      case 3: {
+        return ['field-three', selectedField];
+      }
+      case 4: {
+        return ['field-four', selectedField];
+      }
+      case 5: {
+        return ['field-five', selectedField];
+      }
+      case 6: {
+        return ['field-six', selectedField];
+      }
+      case 7: {
+        return ['field-seven', selectedField];
       }
       case 8: {
-        secondMove();
-        break;
+        return ['field-eight', selectedField];
+      }
+      case 9: {
+        return ['field-nine', selectedField];
       }
       default: {
-        console.log('Fail!');
+        console.log('ERROR! A NON EXPECTED VALUE HAS BEEN SELECTED!');
         break;
       }
     }
   }
-
-  getTheNumberOfTheMove();
+  return getNextMove();
 }
