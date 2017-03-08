@@ -9,11 +9,11 @@
 
 /* import newAiMove from './ai';*/ // ToDo: other way for import
 (function () {
-  const singlePlayer = false;
+  const singlePlayer = true;
   // which player can make a move
-  let isPlayer1 = true;
+  let isPlayer1 = false;
   // which player can make the first move in the round
-  let player1HasFirstMove = true;
+  let player1HasFirstMove = false;
   // all fields who not already has been selected
   let notUsedFields = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -245,6 +245,9 @@ function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) {
       case 8: {
         return secondMove();
       }
+      case 7: {
+        return thirdMove();
+      }
       default: {
         console.log('Fail!');
         break;
@@ -257,13 +260,13 @@ function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) {
    */
   function firstMove() {
     const cornersAndCenter = [1, 3, 5, 7, 9];
-    return getNextMoveParameters(Math.floor(Math.random() * cornersAndCenter.length));
+    return getNextMoveParameters(cornersAndCenter[Math.floor(Math.random() * cornersAndCenter.length)]);
   }
 
   /**the second move in the whole round
    * @return {Number} - the value of the field of the move
    */
-  function secondMove() {
+  function secondMove() { // ToDo: check my strategy
     // if the player selects the middle field
     if (player1[0] === 5) {
       const bestPlays = [1, 3, 7, 9];
@@ -292,8 +295,162 @@ function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) {
     }
   }
 
+  /** the third move in the whole round
+   * @return {Number} - the value of the field of the move
+   */
   function thirdMove() {
+    const playersLastMove = player1[player1.length - 1]; // ToDo: add to nextAiMove scope
+    const aiLastMove = player2[player2.length - 1];
+    const typeOfPlayersLastMove = getTypeOfField(playersLastMove);
+    let nextPlay;
 
+    function aiInCenter() {
+      // if the player has taken an edge field --> take one of the furthest corners from the players field
+      if (typeOfPlayersLastMove === 'edge') {
+        let bestPlays;
+        switch (playersLastMove) {
+          case 2: {
+            bestPlays = [7, 9];
+            break;
+          }
+          case 4: {
+            bestPlays = [3, 9];
+            break;
+          }
+          case 6: {
+            bestPlays = [1, 7];
+            break;
+          }
+          case 8: {
+            bestPlays = [1, 3];
+          }
+        }
+        return bestPlays[Math.floor(Math.random() * bestPlays.length)];
+        // if the player takes a corner --> take the opposite corner of her (diagonal)
+      } else if (typeOfPlayersLastMove === 'corner') {
+        let bestPlay;
+        switch (playersLastMove) {
+          case 1: {
+            bestPlay = 9;
+            break;
+          }
+          case 3: {
+            bestPlay = 7;
+            break;
+          }
+          case 7: {
+            bestPlay = 3;
+            break;
+          }
+          case 9: {
+            bestPlay = 1;
+            break;
+          }
+        }
+        return bestPlay;
+      }
+    }
+
+    function aiInCorner() {
+      // if the player takes the center --> take the diagonal corner from my corner
+      if (typeOfPlayersLastMove === 'center') {
+        let bestPlay;
+        switch (aiLastMove) {
+          case 1: {
+            bestPlay = 9;
+            break;
+          }
+          case 3: {
+            bestPlay = 7;
+            break;
+          }
+          case 7: {
+            bestPlay = 3;
+            break;
+          }
+          case 9: {
+            bestPlay = 1;
+            break;
+          }
+        }
+        return bestPlay;
+        // if the player takes an edge or a corner --> take the other corner in the same row as my first corner
+      } else {
+        let bestPlays;
+        switch (aiLastMove) {
+          case 1: {
+            bestPlays = [3, 7];
+            break;
+          }
+          case 3: {
+            bestPlays = [1, 9];
+            break;
+          }
+          case 7: {
+            bestPlays = [9, 1];
+            break;
+          }
+          case 9: {
+            bestPlays = [7, 3];
+            break;
+          }
+        }
+        // if the player has taken the edge on my row or the other corner on my row --> take the other corner in the column
+        if (playersLastMove === bestPlays[0] || getEdgeBetween(aiLastMove, bestPlays[0]) === playersLastMove) {
+          return bestPlays[1];
+        } else {
+          return bestPlays[0]
+        }
+      }
+    }
+
+    if (aiLastMove === 5) {
+      nextPlay = aiInCenter();
+    } else {
+      nextPlay = aiInCorner();
+    }
+
+    return getNextMoveParameters(nextPlay);
+  }
+
+  /** determines the value of the edge who's between the 2 corners
+   * @param {Number} firstCorner - the first corner
+   * @param {Number} secondCorner - the second corner
+   * @return {Number} - the value of the edge between the 2 corners
+   */
+  function getEdgeBetween(firstCorner, secondCorner) {
+    const edges = [[1, 3, 2], [1, 7, 4], [3, 9, 6], [7, 9, 8]];
+
+    for (let i = 0; i < edges.length; i++) {
+      if (edges[i][0] === firstCorner && edges[i][1] === secondCorner ||
+        edges[i][0] === secondCorner && edges[i][1] === firstCorner) {
+        return edges[i][2];
+      }
+    }
+  }
+
+  /** determines the type of the field
+   * @param {Number} field - the value of a field
+   * @return {String} - the type of the field
+   */
+  function getTypeOfField(field) {
+    switch (field) {
+      case 5: {
+        return 'center';
+      }
+      case 1:
+      case 3:
+      case 7:
+      case 9: {
+        return 'corner';
+      }
+      case 2:
+      case 4:
+      case 6:
+      case 8: {
+        return 'edge';
+      }
+    }
   }
 
   /** returns an array with the id and the value of the next move
