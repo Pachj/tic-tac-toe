@@ -9,7 +9,7 @@
 
 /* import newAiMove from './ai';*/ // ToDo: other way for import
 (function () {
-  const singlePlayer = true; // actual only a placeholder
+  const singlePlayer = false; // actual only a placeholder
   // which player can make a move
   let isPlayer1 = true;
   // which player can make the first move in the round
@@ -151,7 +151,7 @@
     if (arguments.length === 0 && !isPlayer1) {
       let nextMove = newAiMove(player1HasFirstMove, player1.selectedFields, player2.selectedFields, notUsedFields);
       gameController(nextMove[0], nextMove[1]);
-    } else if (arguments.length === 2 && isPlayer1) {
+    } else if (arguments.length === 2) {
       gameController(arguments[0], arguments[1]);
     }
   }
@@ -192,8 +192,10 @@
       } else {
         isPlayer1 = !isPlayer1;
 
-        if (!isPlayer1) {
-          inputController();
+        if (singlePlayer) {
+          if (!isPlayer1) {
+            inputController();
+          }
         }
       }
     }
@@ -223,9 +225,10 @@
  */
 function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) {
   const remainingFields = notUsedFields.length;
-/** gets the next move of the ai
- * @return {Array} - array with the id and the value of the field of the next move
- */
+
+  /** gets the next move of the ai
+   * @return {Array} - array with the id and the value of the field of the next move
+   */
   function getNextMove() {
     switch (remainingFields) {
       case 9: {
@@ -281,6 +284,10 @@ function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) {
     }
   }
 
+  function thirdMove() {
+
+  }
+
   /** returns an array with the id and the value of the next move
    * @param {Number} selectedField - the value of the selected field
    * @return {Array} - array with the id and the value of the field of next move
@@ -320,5 +327,6 @@ function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) {
       }
     }
   }
+
   return getNextMove();
 }
