@@ -9,7 +9,7 @@
 
 /* import newAiMove from './ai';*/ // ToDo: other way for import
 (function () {
-  const singlePlayer = false; // actual only a placeholder
+  const singlePlayer = false;
   // which player can make a move
   let isPlayer1 = true;
   // which player can make the first move in the round
@@ -55,7 +55,7 @@
     // push the value of the button to the selected field array of the actual player
     actualPlayer.selectedFields.push(value);
     // sort the selected fields array of the actual player
-    actualPlayer.selectedFields.sort();
+    /*actualPlayer.selectedFields.sort();*/
 
     const actualId = `#${id}`;
     // display the symbol of the actual player in the selected button
@@ -83,11 +83,12 @@
     // iterate over all winning conditions
     for (let i = 0; i < winningConditions.length; i += 1) {
       // build the regExp string with the values of the current winningConditions array
-      const actualWinningCondition = `^.*${winningConditions[i][0]}.*${winningConditions[i][1]}.*${
-        winningConditions[i][2]}.*$`;
+      const actualWinningCondition = `^.*${winningConditions[i][0]}.*${winningConditions[i][1]}.*${ 
+        winningConditions[i][2]}.*$`; // FixMe: 1, 5, 9 (diagonal) didn't return true in the RegEx (7, 5, 9, 1)
       // create the regExp object
       const regExp = new RegExp(actualWinningCondition, 'g');
 
+      console.log(actualPlayer.selectedFields.toString());
       // if the player has won --> finish the round
       if (regExp.test(actualPlayer.selectedFields.toString())) {
         return true;
@@ -112,6 +113,13 @@
           resultScreen.children('h1').html('You are the Winner!');
         } else {
           resultScreen.children('h1').html('You have lost!');
+        }
+      } else if (!singlePlayer) { // Todo: change winning text in multiplayer
+        // if player1 has made the actual selection
+        if (isPlayer1) {
+          resultScreen.children('h1').html('Player1 is the Winner!');
+        } else {
+          resultScreen.children('h1').html('Player2 is the Winner!');
         }
       }
     } else {
