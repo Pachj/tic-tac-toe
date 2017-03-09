@@ -5,10 +5,11 @@
 /** ToDo: add 2 player mode
  * ToDo: change show()/hide() anchor
  * ToDo: import from ai.js
+ * ToDo: delete brackets from the cases without a declaration
  */
 
 /* import newAiMove from './ai';*/ // ToDo: other way for import
-(function () {
+(function() {
   const singlePlayer = true;
   // which player can make a move
   let isPlayer1 = false;
@@ -55,11 +56,11 @@
     // push the value of the button to the selected field array of the actual player
     actualPlayer.selectedFields.push(value);
     // sort the selected fields array of the actual player
-    /*actualPlayer.selectedFields.sort();*/ //FixMe: 1, 5, 9 (diagonal) didn't return true in the RegEx (7, 5, 9, 1), if the array isn't sorted
+    /*actualPlayer.selectedFields.sort();*/ // FixMe: 1, 5, 9 (diagonal) didn't return true in the RegEx (7, 5, 9, 1), if the array isn't sorted
 
     const actualId = `#${id}`;
     // display the symbol of the actual player in the selected button
-    if ($(actualId).html().length === 0) { //ToDo: could be removed
+    if ($(actualId).html().length === 0) { // ToDo: could be removed
       $(actualId).html(`<i class='${actualPlayer.symbol}'></i>`);
     }
 
@@ -155,15 +156,6 @@
     $('#result-screen').hide('slow');
   }
 
-  function inputController() { // ToDo: could be removed
-    if (arguments.length === 0 && !isPlayer1) {
-      let nextMove = newAiMove(player1HasFirstMove, player1.selectedFields, player2.selectedFields, notUsedFields);
-      gameController(nextMove[0], nextMove[1]);
-    } else if (arguments.length === 2) {
-      gameController(arguments[0], arguments[1]);
-    }
-  }
-
   /**
    * controls the whole game functionality
    * @param {String} id - the id of the field who has been selected
@@ -206,6 +198,15 @@
           }
         }
       }
+    }
+  }
+
+  function inputController() { // ToDo: could be removed
+    if (arguments.length === 0 && !isPlayer1) {
+      const nextMove = newAiMove(player1HasFirstMove, player1.selectedFields, player2.selectedFields, notUsedFields);
+      gameController(nextMove[0], nextMove[1]);
+    } else if (arguments.length === 2) {
+      gameController(arguments[0], arguments[1]);
     }
   }
 
@@ -255,7 +256,7 @@ function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) {
     }
   }
 
-  /**the first move in the whole round
+  /** the first move in the whole round
    * @return {Number} - the value of the field of the move
    */
   function firstMove() {
