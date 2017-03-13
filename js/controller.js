@@ -18,6 +18,6 @@ $(document).ready(function() {
   $('.game-field').click(function() {
     const id = this.id;
     const value = parseInt($(this).attr('value'));
-    myApp.actualGame.addNewAction(value, id);
+    myApp.actualGame.actionController(value, id);
   });
 });

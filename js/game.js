@@ -18,10 +18,14 @@ class Game {
     this.running = true;
   }
 
-  addNewAction(field, idOfTheField) {
+  /** handles the the new action
+   * @param {Number} field - the index of the selected field
+   * @param {String} idOfTheField - the id of the selected field
+   */
+  actionController(field, idOfTheField) {
     if (this.actualState.checkIfFieldIsEmpty(field)) {
-      this.actualState.createNewBoard(field);
-      Ui.showNewAction(idOfTheField, this.actualState.actualPlayer.symbol);
+      this.actualState.addFieldToBoard(field);
+      Ui.showNewAction(idOfTheField, this.actualState.getActualPlayer().symbol);
       this.actualState.changePlayer();
     }
   }
@@ -33,17 +37,32 @@ class State {
     this.actualPlayer = actualPlayer;
   }
 
-  createNewBoard(newField) {
-    this.board.splice(newField, 1, this.actualPlayer.symbol);
+  /** adds the given field to the board
+   * @param {Number} field - the index of the field who has to be added
+   */
+  addFieldToBoard(field) {
+    this.board.splice(field, 1, this.actualPlayer.symbol);
   }
 
+  /** checks if the given field is empty
+   * @param {Number} field - the index of the field who has to be checked
+   * @return {Boolean} whether the field is empty
+   */
   checkIfFieldIsEmpty(field) {
     return this.board[field] === 'e';
   }
 
+  //changes the player who can make an action
   changePlayer() {
     this.actualPlayer =
         (this.actualPlayer === myApp.player1 ? myApp.ai : myApp.player1);
+  }
+
+  /** return the player who actually can make an action
+   * @return {Object} the player object
+   */
+  getActualPlayer() {
+    return this.actualPlayer;
   }
 }
 
