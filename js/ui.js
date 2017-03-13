@@ -4,9 +4,15 @@
 
 class Ui {
   static showOrHideElement(elementSelector) {
-    const newPropertie = (elementSelector.css('display') ===
-      'block' ? 'none' : 'block');
+    const newProperty = (elementSelector.css('display') ===
+    'block' ? 'none' : 'block');
 
-    elementSelector.css('display', newPropertie);
+    elementSelector.css('display', newProperty);
+  }
+
+  static showNewAction(idOfTheNewField, symbol) {
+    const icon = (symbol === 'x' ? 'fa fa-times' : 'fa fa-circle-o');
+    const id = '#' + idOfTheNewField;
+    $(id).html('<i class="' + icon + '"></i>');
   }
 }
