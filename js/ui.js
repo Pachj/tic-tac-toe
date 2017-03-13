@@ -24,4 +24,16 @@ class Ui {
     const id = '#' + idOfTheNewField;
     $(id).html('<i class="' + icon + '"></i>');
   }
+
+  /** shows the given player as the winner
+   * @param {Object} player - the player object who is the winner*/
+  static showWinner(player) {
+    const selector = $('#result-screen');
+    const message = (player === myApp.player1 ?
+        'You are the winner!' : 'The AI ist the winner.');
+
+    selector.html(message);
+    Ui.showOrHideElement(selector);
+    window.setTimeout(Ui.showOrHideElement, 3000, selector);
+  }
 }

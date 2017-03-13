@@ -2,9 +2,9 @@
  * Created by Henry on 13.03.17.
  */
 
-class Ai {
+class Ai extends Player{
   constructor(symbol) {
-    this.symbol = symbol;
+    super(symbol);
     this.moves = 0;
   }
 }

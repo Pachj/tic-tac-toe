@@ -14,8 +14,7 @@ class Game {
   constructor(playerWithFirstMove) {
     this.playerWithFirstMove = playerWithFirstMove;
     this.actualState = new State(
-        ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'], playerWithFirstMove);
-    this.running = true;
+      ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'], playerWithFirstMove);
   }
 
   /** handles the the new action
@@ -26,6 +25,10 @@ class Game {
     if (this.actualState.checkIfFieldIsEmpty(field)) {
       this.actualState.addFieldToBoard(field);
       Ui.showNewAction(idOfTheField, this.actualState.getActualPlayer().symbol);
+
+      if (this.actualState.checkWinner()) {
+        Ui.showWinner(this.actualState.getActualPlayer());
+      }
       this.actualState.changePlayer();
     }
   }
@@ -55,7 +58,7 @@ class State {
   //changes the player who can make an action
   changePlayer() {
     this.actualPlayer =
-        (this.actualPlayer === myApp.player1 ? myApp.ai : myApp.player1);
+      (this.actualPlayer === myApp.player1 ? myApp.ai : myApp.player1);
   }
 
   /** return the player who actually can make an action
@@ -63,6 +66,26 @@ class State {
    */
   getActualPlayer() {
     return this.actualPlayer;
+  }
+
+  /** checks if the player who had made a move has won now
+   * @return {Boolean} whether the player has won*/
+  checkWinner() {
+    const winningConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+
+    let checkActualCondition = (actualCondition) => {
+      return ((this.board[actualCondition[0]] &&
+      this.board[actualCondition[1]] && this.board[actualCondition[2]]) ===
+      ('x' || 'o'));
+    };
+
+    for (let i = 0; i < winningConditions.length; i++) {
+      if (checkActualCondition(winningConditions[i])) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
