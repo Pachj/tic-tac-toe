@@ -7,10 +7,12 @@ class Ui {
    * @param {String} elementSelector - the id of the element
    */
   static showOrHideElement(elementSelector) {
-    const newProperty = (elementSelector.css('display') ===
-    'block' ? 'none' : 'block');
-
-    elementSelector.css('display', newProperty);
+    const displayValue = elementSelector.css('display');
+    if (displayValue === 'block') {
+      elementSelector.hide('slow');
+    } else {
+      elementSelector.show('slow');
+    }
   }
 
   /** shows the given action
