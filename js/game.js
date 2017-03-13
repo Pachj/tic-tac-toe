@@ -19,9 +19,11 @@ class Game {
   }
 
   addNewAction(field, idOfTheField) {
-    this.actualState.createNewBoard(field);
-    Ui.showNewAction(idOfTheField, this.actualState.actualPlayer.symbol);
-    this.actualState.changePlayer();
+    if (this.actualState.checkIfFieldIsEmpty(field)) {
+      this.actualState.createNewBoard(field);
+      Ui.showNewAction(idOfTheField, this.actualState.actualPlayer.symbol);
+      this.actualState.changePlayer();
+    }
   }
 }
 
@@ -33,6 +35,10 @@ class State {
 
   createNewBoard(newField) {
     this.board.splice(newField, 1, this.actualPlayer.symbol);
+  }
+
+  checkIfFieldIsEmpty(field) {
+    return this.board[field] === 'e';
   }
 
   changePlayer() {
