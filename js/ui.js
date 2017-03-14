@@ -27,13 +27,30 @@ class Ui {
 
   /** shows the given player as the winner
    * @param {Object} player - the player object who is the winner*/
-  static showWinner(player) {
+  static showEndScreen(player) {
     const selector = $('#result-screen');
-    const message = (player === myApp.player1 ?
-        'You are the winner!' : 'The AI ist the winner.');
-
+    let message;
+    if (player) {
+      message = (player === myApp.player1 ?
+          'You are the winner!' : 'The AI ist the winner.');
+    } else {
+      message = 'Its a draw.';
+    }
     selector.html(message);
     Ui.showOrHideElement(selector);
+    Ui.resetBoard();
     window.setTimeout(Ui.showOrHideElement, 3000, selector);
+  }
+
+  // fades the HTML content of the field out and
+  static resetBoard() {
+    const selector = $('.game-field');
+
+    let reset = () => {
+      selector.html('');
+    };
+
+    selector.children('i').fadeOut(3000);
+    window.setTimeout(reset, 3000);
   }
 }

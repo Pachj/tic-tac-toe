@@ -8,6 +8,12 @@ class App {
     this.ai = new Ai(symbols[1]);
     this.actualGame = new Game(this.player1);
   }
+
+  terminateGame() {
+    const playerWithFirstMove = this.actualGame.playerWithFirstMove ===
+        this.player1 ? this.ai : this.player1;
+    this.actualGame = new Game(playerWithFirstMove);
+  }
 }
 
 class Game {
@@ -21,15 +27,20 @@ class Game {
    * @param {Number} field - the index of the selected field
    * @param {String} idOfTheField - the id of the selected field
    */
-  actionController(field, idOfTheField) {
+  actionHandler(field, idOfTheField) {
     if (this.actualState.checkIfFieldIsEmpty(field)) {
       this.actualState.addFieldToBoard(field);
       Ui.showNewAction(idOfTheField, this.actualState.getActualPlayer().symbol);
 
       if (this.actualState.checkWinner()) {
-        Ui.showWinner(this.actualState.getActualPlayer());
+        Ui.showEndScreen(this.actualState.getActualPlayer());
+        myApp.terminateGame();
+      } else if (this.actualState.isFinished()) {
+        Ui.showEndScreen(undefined);
+        myApp.terminateGame();
+      } else {
+        this.actualState.changePlayer();
       }
-      this.actualState.changePlayer();
     }
   }
 }
@@ -97,6 +108,12 @@ class State {
         return true;
       }
     }
+  }
+
+  /** checks if all fields are filled
+   * @return {Boolean} - whether the field has any 'e' left*/
+  isFinished() {
+    return (this.board.indexOf('e') === -1);
   }
 }
 
