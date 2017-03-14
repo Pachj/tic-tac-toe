@@ -42,7 +42,7 @@ class Ui {
     window.setTimeout(Ui.showOrHideElement, 3000, selector);
   }
 
-  // fades the HTML content of the field out and
+  // fades the HTML content of the fields out and resets them
   static resetBoard() {
     const selector = $('.game-field');
 

@@ -23,7 +23,7 @@ class Game {
         ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'], playerWithFirstMove);
   }
 
-  /** handles the the new action
+  /** handles the the new action and checks whether the game is finished
    * @param {Number} field - the index of the selected field
    * @param {String} idOfTheField - the id of the selected field
    */
