@@ -14,7 +14,7 @@ class Game {
   constructor(playerWithFirstMove) {
     this.playerWithFirstMove = playerWithFirstMove;
     this.actualState = new State(
-      ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'], playerWithFirstMove);
+        ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'], playerWithFirstMove);
   }
 
   /** handles the the new action
@@ -58,7 +58,7 @@ class State {
   //changes the player who can make an action
   changePlayer() {
     this.actualPlayer =
-      (this.actualPlayer === myApp.player1 ? myApp.ai : myApp.player1);
+        (this.actualPlayer === myApp.player1 ? myApp.ai : myApp.player1);
   }
 
   /** return the player who actually can make an action
@@ -74,18 +74,29 @@ class State {
     const winningConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8],
       [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
 
-    let checkActualCondition = (actualCondition) => {
-      return ((this.board[actualCondition[0]] &&
-      this.board[actualCondition[1]] && this.board[actualCondition[2]]) ===
-      ('x' || 'o'));
+    // checks if the actual winning condition is "true"
+    let checkActualCondition = (actualCondition, symbol) => {
+      for (let j = 0; j < actualCondition.length; j++) {
+        if (this.board[actualCondition[0]] === symbol) {
+          if (this.board[actualCondition[1]] === symbol) {
+            if (this.board[actualCondition[2]] === symbol) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
     };
 
+    // iterates over all sub arrays in winningConditions
     for (let i = 0; i < winningConditions.length; i++) {
-      if (checkActualCondition(winningConditions[i])) {
+      const actualCondition = winningConditions[i];
+      if (checkActualCondition(actualCondition, 'x')) {
+        return true;
+      } else if (checkActualCondition(actualCondition, 'o')) {
         return true;
       }
     }
-    return false;
   }
 }
 
