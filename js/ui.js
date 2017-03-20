@@ -3,10 +3,12 @@
  */
 
 class Ui {
-  static showOrHideElement(elementId) { // ToDo: animation
+  static showOrHideElement(elementId) {
     const selector = $('#' + elementId);
-    const newProperty = selector.css('display') === 'none' ?
-        'block' : 'none';
-    selector.css('display', newProperty);
+    if (selector.css('display') === 'block') {
+      selector.hide('slow');
+    } else {
+      selector.show('slow');
+    }
   }
 }
