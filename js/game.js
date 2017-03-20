@@ -41,6 +41,33 @@ class GameState {
     if (this.actualBoard.checkFieldEmpty(selectedField)) {
       this.actualBoard.addNewField(selectedField, this.actualPlayer.symbol);
       Ui.showMove(this.actualPlayer.symbol, selectedFieldId);
+      if (this.checkSomeoneWon()) {
+        console.log('bla');
+      }
+    }
+  }
+
+  checkSomeoneWon() { // ToDo: rename this function
+    const winningConditions = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+    const symbolOfActualPlayer = this.actualPlayer.symbol;
+
+    let checkActualCondition = (condition) => {
+      if (condition[0] === symbolOfActualPlayer) {
+        if (condition[1] === symbolOfActualPlayer) {
+          if (condition[2] === symbolOfActualPlayer) {
+            return true;
+          }
+        }
+      }
+      return false;
+    };
+
+    for (let i = 0; i < winningConditions.length; i++) {
+      if (checkActualCondition(winningConditions[i])) {
+        return true;
+      }
     }
   }
 }
