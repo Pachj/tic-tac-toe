@@ -12,5 +12,8 @@ $(document).ready(() => {
 
     myApp = new App(symbolPlayer, symbolAi);
     Ui.showOrHideElement('choose-symbol');
+    $('.game-field').prop('disabled', true);
+
+    myApp.actualGame.getNextMove();
   });
 });

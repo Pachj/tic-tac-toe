@@ -6,4 +6,15 @@ class Player {
   constructor(symbol) {
     this.symbol = symbol;
   }
+
+  getMove(gameState) {
+    const selector = $('.game-field');
+    selector.prop('disabled', false);
+
+    selector.click(function() {
+      const selectedField = parseInt($(this).attr('value'));
+      const selectedFieldId = '#' + this.id;
+      gameState.processNewMove(selectedField, selectedFieldId);
+    });
+  }
 }
