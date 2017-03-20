@@ -11,5 +11,6 @@ $(document).ready(() => {
     const symbolAi = symbolPlayer === 'x' ? 'o' : 'x';
 
     myApp = new App(symbolPlayer, symbolAi);
+    // ToDo: hide choose-symbol
   });
 });
