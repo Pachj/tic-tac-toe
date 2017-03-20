@@ -4,13 +4,13 @@
 let myApp;
 
 $(document).ready(() => {
-  Ui.showOrHideElement('choose-symbol');
+  $('#choose-symbol').css('display', 'block');
 
-  $('#circle, #cross').click(() => {
-    const symbolPlayer = this.attr('value');
+  $('#circle, #cross').click(function() {
+    const symbolPlayer = $(this).attr('value');
     const symbolAi = symbolPlayer === 'x' ? 'o' : 'x';
 
     myApp = new App(symbolPlayer, symbolAi);
-    // ToDo: hide choose-symbol
+    Ui.showOrHideElement('choose-symbol');
   });
 });
