@@ -5,6 +5,7 @@
 class App {
   constructor(symbolPlayer, symbolAi) {
     this.player = new Player(symbolPlayer);
+    this.ai = new Ai(symbolAi);
     this.playerWithFirstMove = this.player;
   }
 }
