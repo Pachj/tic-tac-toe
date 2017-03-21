@@ -47,6 +47,9 @@ class GameState {
     }
   }
 
+  /** checks if the player who had made the new move has won
+   * @return {Boolean} whether the player has won
+   */
   checkActualPlayerHasWon() {
     const winningConditions = [
       [0, 1, 2], [3, 4, 5], [6, 7, 8],
@@ -69,6 +72,7 @@ class GameState {
         return true;
       }
     }
+    return false;
   }
 }
 
