@@ -42,7 +42,7 @@ class GameState {
       this.actualBoard.addNewField(selectedField, this.actualPlayer.symbol);
       Ui.showMove(this.actualPlayer.symbol, selectedFieldId);
       if (this.checkActualPlayerHasWon()) {
-
+        Ui.showEndScreen(this.actualPlayer);
       }
     }
   }
