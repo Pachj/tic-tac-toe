@@ -44,4 +44,9 @@ class Ui {
     this.showOrHideElement('result-screen');
     setTimeout(this.showOrHideElement, 3000, 'result-screen');
   }
+
+  // clears all fields
+  static resetBoard() { // ToDo: needs to be tested
+    $('.game-field').html('');
+  }
 }

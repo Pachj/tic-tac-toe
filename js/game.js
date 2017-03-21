@@ -9,6 +9,14 @@ class App {
     this.playerWithFirstMove = this.player;
     this.actualGame = new Game(this.playerWithFirstMove, this.player, this.ai);
   }
+
+  // terminates the actual game and starts a new one
+  terminateGame() { // ToDo: needs to be tested
+    this.playerWithFirstMove = this.playerWithFirstMove === this.player ?
+        this.ai : this.player;
+    this.actualGame = new Game(this.playerWithFirstMove, this.player, this.ai);
+    Ui.resetBoard();
+  }
 }
 
 class Game {
@@ -19,7 +27,7 @@ class Game {
   }
 
   // calls the player or the ai for the next move
-  getNextMove() {
+  getNextMove() { //ToDo: change actualPlayer
     if (this.actualState.actualPlayer === this.player) {
       this.player.getMove(this.actualState);
     }
@@ -43,6 +51,7 @@ class GameState {
       Ui.showMove(this.actualPlayer.symbol, selectedFieldId);
       if (this.checkActualPlayerHasWon()) { // ToDo: checkGameFinished
         Ui.showEndScreen(this.actualPlayer);
+        myApp.terminateGame();
       }
     }
   }
