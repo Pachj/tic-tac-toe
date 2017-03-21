@@ -74,6 +74,18 @@ class GameState {
     }
     return false;
   }
+
+  /** checks if the game is finished
+   * @return {Boolean} whether the games is finished
+   */
+  checkGameIsFinished() { // ToDo: needs to be tested
+    for (let i = 0; i < this.actualBoard.board.length; i++) {
+      if (this.actualBoard.board[i] === 'e') {
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
 class Board {
