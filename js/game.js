@@ -21,7 +21,7 @@ class App {
 
 class Game {
   constructor(playerWithFirstMove, player, ai) {
-    this.actualState = new GameState(playerWithFirstMove);
+    this.actualState = new GameState(playerWithFirstMove, undefined);
     this.player = player;
     this.ai = ai;
   }
@@ -35,10 +35,10 @@ class Game {
 }
 
 class GameState {
-  constructor(playerWithFirstMove) {
+  constructor(playerWithFirstMove, oldBoard) {
     this.aiMovesCounter = 0;
     this.actualPlayer = playerWithFirstMove;
-    this.actualBoard = new Board();
+    this.actualBoard = new Board(oldBoard);
   }
 
   /** handles a new move from the player or the ai
@@ -99,7 +99,14 @@ class GameState {
 
 class Board {
   constructor() {
-    this.board = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'];
+    if (arguments[0] === undefined) {
+      this.board = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'];
+    } else {
+      arguments[0].forEach((field) => {
+        this.board.push(field);
+      });
+      console.log(this.board);
+    }
   }
 
   /** checks if the given field is empty on the board
