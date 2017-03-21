@@ -41,7 +41,7 @@ class GameState {
     if (this.actualBoard.checkFieldEmpty(selectedField)) {
       this.actualBoard.addNewField(selectedField, this.actualPlayer.symbol);
       Ui.showMove(this.actualPlayer.symbol, selectedFieldId);
-      if (this.checkActualPlayerHasWon()) {
+      if (this.checkActualPlayerHasWon()) { // ToDo: checkGameFinished
         Ui.showEndScreen(this.actualPlayer);
       }
     }

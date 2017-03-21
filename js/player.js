@@ -7,7 +7,7 @@ class Player {
     this.symbol = symbol;
   }
 
-  getMove(gameState) {
+  getMove(gameState) { // ToDo: disable buttons
     const selector = $('.game-field');
     selector.prop('disabled', false);
 
