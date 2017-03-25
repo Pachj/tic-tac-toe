@@ -71,7 +71,9 @@ function getMinimax(gameState) {
     /*console.log('#' + gameState.currentDepth + ' player has won: ' +
      gameState.actualPlayer);*/
 
-    minimaxValueOfActualState = gameState.actualPlayer === 'x' ? 10 : -10;
+    minimaxValueOfActualState = gameState.actualPlayer === 'x' ?
+        (10 - gameState.currentDepth) :
+        (-10 + gameState.currentDepth);
   } else {
     // the empty fields
     const emptyFields = gameState.getEmptyFields();
