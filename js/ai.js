@@ -60,54 +60,95 @@ class gameState {
   };
 }
 
-function getMove(gameState) {
-  console.log('#' + gameState.currentDepth + ' actualState: ' +
-      gameState.board.toString() + ' actualPlayer: ' +
-      gameState.actualPlayer.toString());
+function getMinimax(gameState) {
+  let minimaxValueOfActualState;
+  /*console.log('#' + gameState.currentDepth + ' actualState: ' +
+   gameState.board.toString() + ' actualPlayer: ' +
+   gameState.actualPlayer.toString());*/
 
   // checks if the actualPlayer has won
   if (gameState.checkActualPlayerHasWon()) {
-    console.log('#' + gameState.currentDepth + ' player has won: ' +
-        gameState.actualPlayer);
+    /*console.log('#' + gameState.currentDepth + ' player has won: ' +
+     gameState.actualPlayer);*/
 
-    return gameState.actualPlayer === 'x' ? 10 : -10;
+    minimaxValueOfActualState = gameState.actualPlayer === 'x' ? 10 : -10;
+  } else {
+    // the empty fields
+    const emptyFields = gameState.getEmptyFields();
+
+    // checks if no empty fields are left
+    if (emptyFields.length === 0) {
+      /*console.log('#' + gameState.currentDepth + ' patt!');*/
+      minimaxValueOfActualState = 0;
+    } else {
+
+      // gehe in Rekursion
+
+      // switches the player
+      gameState.switchPlayer();
+
+      let badestMinMaxValueForActualPlayer = gameState.actualPlayer === 'x' ?
+          -10 :
+          10;
+      let bestMove = undefined;
+
+      // iterates over all empty fields
+      emptyFields.forEach((field) => {
+        let newGameState = gameState.clone();
+        newGameState.applyTo(field);
+
+        const choosenMoveValue = getMinimax(newGameState);
+        if (gameState.actualPlayer === 'x') {
+          if (badestMinMaxValueForActualPlayer < choosenMoveValue) {
+            bestMove = field;
+            badestMinMaxValueForActualPlayer = choosenMoveValue;
+          }
+        } else {
+          if (badestMinMaxValueForActualPlayer > choosenMoveValue) {
+            bestMove = field;
+            badestMinMaxValueForActualPlayer = choosenMoveValue;
+          }
+        }
+      });
+      /*console.log('#' + gameState.currentDepth + ' actualPlayer: ' +
+       gameState.actualPlayer + ' BestMove: ' + bestMove + ' minmaxValue: ' +
+       badestMinMaxValueForActualPlayer);*/
+      minimaxValueOfActualState = badestMinMaxValueForActualPlayer;
+    }
   }
-  // the empty fields
+  return minimaxValueOfActualState;
+}
+
+function getMove(gameState) {
   const emptyFields = gameState.getEmptyFields();
-
-  // checks if no empty fields are left
-  if (emptyFields.length === 0) {
-    console.log('#' + gameState.currentDepth + ' patt!');
-    return 0;
-  }
-
-  // gehe in Rekursion
+  let bestMove;
 
   // switches the player
   gameState.switchPlayer();
 
-  let minmaxValue = gameState.actualPlayer === 'x' ? -10 : 10;
-  let bestMove = undefined;
+  let badestMinMaxValueForActualPlayer = gameState.actualPlayer === 'x' ?
+      -10 : 10;
 
-  // iterates over all empty fields
   emptyFields.forEach((field) => {
     let newGameState = gameState.clone();
     newGameState.applyTo(field);
 
-    const choosenMoveValue = getMove(newGameState);
+    const choosenMoveValue = getMinimax(newGameState);
     if (gameState.actualPlayer === 'x') {
-      if (minmaxValue < choosenMoveValue) {
+      if (badestMinMaxValueForActualPlayer < choosenMoveValue) {
         bestMove = field;
-        minmaxValue = choosenMoveValue;
+        badestMinMaxValueForActualPlayer = choosenMoveValue;
       }
     } else {
-      if (minmaxValue > choosenMoveValue) {
+      if (badestMinMaxValueForActualPlayer > choosenMoveValue) {
         bestMove = field;
-        minmaxValue = choosenMoveValue;
+        badestMinMaxValueForActualPlayer = choosenMoveValue;
       }
     }
   });
   console.log('#' + gameState.currentDepth + ' actualPlayer: ' +
       gameState.actualPlayer + ' BestMove: ' + bestMove + ' minmaxValue: ' +
-      minmaxValue);
+      badestMinMaxValueForActualPlayer);
+
+  return bestMove;
 }
