@@ -65,24 +65,49 @@ function getMove(gameState) {
       gameState.board.toString() + ' actualPlayer: ' +
       gameState.actualPlayer.toString());
 
+  // checks if the actualPlayer has won
   if (gameState.checkActualPlayerHasWon()) {
     console.log('#' + gameState.currentDepth + ' player has won: ' +
         gameState.actualPlayer);
 
     return gameState.actualPlayer === 'x' ? 10 : -10;
   }
+  // the empty fields
   const emptyFields = gameState.getEmptyFields();
 
+  // checks if no empty fields are left
   if (emptyFields.length === 0) {
     console.log('#' + gameState.currentDepth + ' patt!');
     return 0;
   }
 
+  // gehe in Rekursion
+
+  // switches the player
+  gameState.switchPlayer();
+
+  let minmaxValue = gameState.actualPlayer === 'x' ? -10 : 10;
+  let bestMove = undefined;
+
+  // iterates over all empty fields
   emptyFields.forEach((field) => {
     let newGameState = gameState.clone();
     newGameState.applyTo(field);
-    newGameState.switchPlayer();
 
-    getMove(newGameState);
+    const choosenMoveValue = getMove(newGameState);
+    if (gameState.actualPlayer === 'x') {
+      if (minmaxValue < choosenMoveValue) {
+        bestMove = field;
+        minmaxValue = choosenMoveValue;
+      }
+    } else {
+      if (minmaxValue > choosenMoveValue) {
+        bestMove = field;
+        minmaxValue = choosenMoveValue;
+      }
+    }
   });
+  console.log('#' + gameState.currentDepth + ' actualPlayer: ' +
+      gameState.actualPlayer + ' BestMove: ' + bestMove + ' minmaxValue: ' +
+      minmaxValue);
 }
