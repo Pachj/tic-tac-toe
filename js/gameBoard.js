@@ -29,7 +29,6 @@
     selectedFields: [],
   };
 
-
   /** choose the selected symbol for player1 and the opposite for player2
    * @param {String} selectedSymbol - the id of the selected button*/
   function chooseSymbol(selectedSymbol) {
@@ -78,7 +77,8 @@
    * @return {Boolean} - if the player has won*/
   function hasWon(actualPlayer) {
     // all winning conditions
-    const winningConditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9],
+    const winningConditions = [
+      [1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9],
       [1, 5, 9], [3, 5, 7]];
     const sortedActualPlayer = actualPlayer.selectedFields.sort(); // FixMe: 1, 5, 9 (diagonal) didn't return true in the RegEx (7, 5, 9, 1), if the array isn't sorted
 
@@ -86,7 +86,7 @@
     for (let i = 0; i < winningConditions.length; i += 1) {
       // build the regExp string with the values of the current winningConditions array
       const actualWinningCondition = `^.*${winningConditions[i][0]}.*${winningConditions[i][1]}.*${
-        winningConditions[i][2]}.*$`; // FixMe: 1, 5, 9 (diagonal) didn't return true in the RegEx (7, 5, 9, 1), if the array isn't sorted
+          winningConditions[i][2]}.*$`; // FixMe: 1, 5, 9 (diagonal) didn't return true in the RegEx (7, 5, 9, 1), if the array isn't sorted
       // create the regExp object
       const regExp = new RegExp(actualWinningCondition, 'g');
 
@@ -125,14 +125,15 @@
       }
     } else {
       // display a draw
-      resultScreen.children('h1').html("Nobody has won. It's a draw.");
+      resultScreen.children('h1').html('Nobody has won. It\'s a draw.');
     }
   }
 
   // resets the whole game
   function resetGame() {
     // the id's of all game-buttons
-    const fields = ['#field-one', '#field-two', '#field-three', '#field-four', '#field-five',
+    const fields = [
+      '#field-one', '#field-two', '#field-three', '#field-four', '#field-five',
       '#field-six', '#field-seven', '#field-eight', '#field-nine'];
 
     // reset the game-buttons
@@ -186,7 +187,8 @@
       if (hasWon(actualPlayer)) {
         finishRound(actualPlayer);
         window.setTimeout(resetGame, 3000);
-      } else if (player1.selectedFields.length + player2.selectedFields.length === 9) {
+      } else if (player1.selectedFields.length +
+          player2.selectedFields.length === 9) {
         finishRound();
         window.setTimeout(resetGame, 3000);
       } else {
@@ -203,7 +205,8 @@
 
   function inputController() { // ToDo: could be removed
     if (arguments.length === 0 && !isPlayer1) {
-      const nextMove = newAiMove(player1HasFirstMove, player1.selectedFields, player2.selectedFields, notUsedFields);
+      const nextMove = newAiMove(player1HasFirstMove, player1.selectedFields,
+          player2.selectedFields, notUsedFields);
       gameController(nextMove[0], nextMove[1]);
     } else if (arguments.length === 2) {
       gameController(arguments[0], arguments[1]);
@@ -212,7 +215,7 @@
 
   $(document).ready(() => {
     $('#choose-symbol').css('display', 'block');
-    $('#cross, #circle').click(function () {
+    $('#cross, #circle').click(function() {
       chooseSymbol(this.id);
 
       // if the ai can make the first move --> make first move
@@ -221,7 +224,7 @@
       }
     });
 
-    $('.game-field').click(function () {
+    $('.game-field').click(function() {
       inputController(this.id, parseInt($(this).attr('value'), 10));
     });
   });
@@ -255,244 +258,4 @@ function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) {
       }
     }
   }
-
-  /** the first move in the whole round
-   * @return {Number} - the value of the field of the move
-   */
-  function firstMove() {
-    const cornersAndCenter = [1, 3, 5, 7, 9];
-    return getNextMoveParameters(cornersAndCenter[Math.floor(Math.random() * cornersAndCenter.length)]);
-  }
-
-  /**the second move in the whole round
-   * @return {Number} - the value of the field of the move
-   */
-  function secondMove() { // ToDo: check my strategy
-    // if the player selects the middle field
-    if (player1[0] === 5) {
-      const bestPlays = [1, 3, 7, 9];
-      return getNextMoveParameters(Math.floor(Math.random() * bestPlays.length));
-      // if the player selects one of the corners
-    } else if (player1[0] === 1 || player1[0] === 3 || player1[0] === 7 || player1[0] === 9) {
-      return getNextMoveParameters(5);
-      // if the player selects one of the edges
-    } else {
-      const player1NewField = player1[0];
-      let nextPlay;
-      if (player1NewField === 2) {
-        const bestPlays = [1, 3];
-        nextPlay = bestPlays[Math.floor(Math.random() * bestPlays.length)];
-      } else if (player1NewField === 4) {
-        const bestPlays = [1, 7];
-        nextPlay = bestPlays[Math.floor(Math.random() * bestPlays.length)];
-      } else if (player1NewField === 6) {
-        const bestPlays = [3, 9];
-        nextPlay = bestPlays[Math.floor(Math.random() * bestPlays.length)];
-      } else if (player1NewField === 8) {
-        const bestPlays = [7, 9];
-        nextPlay = bestPlays[Math.floor(Math.random() * bestPlays.length)];
-      }
-      return getNextMoveParameters(nextPlay);
-    }
-  }
-
-  /** the third move in the whole round
-   * @return {Number} - the value of the field of the move
-   */
-  function thirdMove() {
-    const playersLastMove = player1[player1.length - 1]; // ToDo: add to nextAiMove scope
-    const aiLastMove = player2[player2.length - 1];
-    const typeOfPlayersLastMove = getTypeOfField(playersLastMove);
-    let nextPlay;
-
-    function aiInCenter() {
-      // if the player has taken an edge field --> take one of the furthest corners from the players field
-      if (typeOfPlayersLastMove === 'edge') {
-        let bestPlays;
-        switch (playersLastMove) {
-          case 2: {
-            bestPlays = [7, 9];
-            break;
-          }
-          case 4: {
-            bestPlays = [3, 9];
-            break;
-          }
-          case 6: {
-            bestPlays = [1, 7];
-            break;
-          }
-          case 8: {
-            bestPlays = [1, 3];
-          }
-        }
-        return bestPlays[Math.floor(Math.random() * bestPlays.length)];
-        // if the player takes a corner --> take the opposite corner of her (diagonal)
-      } else if (typeOfPlayersLastMove === 'corner') {
-        let bestPlay;
-        switch (playersLastMove) {
-          case 1: {
-            bestPlay = 9;
-            break;
-          }
-          case 3: {
-            bestPlay = 7;
-            break;
-          }
-          case 7: {
-            bestPlay = 3;
-            break;
-          }
-          case 9: {
-            bestPlay = 1;
-            break;
-          }
-        }
-        return bestPlay;
-      }
-    }
-
-    function aiInCorner() {
-      // if the player takes the center --> take the diagonal corner from my corner
-      if (typeOfPlayersLastMove === 'center') {
-        let bestPlay;
-        switch (aiLastMove) {
-          case 1: {
-            bestPlay = 9;
-            break;
-          }
-          case 3: {
-            bestPlay = 7;
-            break;
-          }
-          case 7: {
-            bestPlay = 3;
-            break;
-          }
-          case 9: {
-            bestPlay = 1;
-            break;
-          }
-        }
-        return bestPlay;
-        // if the player takes an edge or a corner --> take the other corner in the same row as my first corner
-      } else {
-        let bestPlays;
-        switch (aiLastMove) {
-          case 1: {
-            bestPlays = [3, 7];
-            break;
-          }
-          case 3: {
-            bestPlays = [1, 9];
-            break;
-          }
-          case 7: {
-            bestPlays = [9, 1];
-            break;
-          }
-          case 9: {
-            bestPlays = [7, 3];
-            break;
-          }
-        }
-        // if the player has taken the edge on my row or the other corner on my row --> take the other corner in the column
-        if (playersLastMove === bestPlays[0] || getEdgeBetween(aiLastMove, bestPlays[0]) === playersLastMove) {
-          return bestPlays[1];
-        } else {
-          return bestPlays[0]
-        }
-      }
-    }
-
-    if (aiLastMove === 5) {
-      nextPlay = aiInCenter();
-    } else {
-      nextPlay = aiInCorner();
-    }
-
-    return getNextMoveParameters(nextPlay);
-  }
-
-  /** determines the value of the edge who's between the 2 corners
-   * @param {Number} firstCorner - the first corner
-   * @param {Number} secondCorner - the second corner
-   * @return {Number} - the value of the edge between the 2 corners
-   */
-  function getEdgeBetween(firstCorner, secondCorner) {
-    const edges = [[1, 3, 2], [1, 7, 4], [3, 9, 6], [7, 9, 8]];
-
-    for (let i = 0; i < edges.length; i++) {
-      if (edges[i][0] === firstCorner && edges[i][1] === secondCorner ||
-        edges[i][0] === secondCorner && edges[i][1] === firstCorner) {
-        return edges[i][2];
-      }
-    }
-  }
-
-  /** determines the type of the field
-   * @param {Number} field - the value of a field
-   * @return {String} - the type of the field
-   */
-  function getTypeOfField(field) {
-    switch (field) {
-      case 5: {
-        return 'center';
-      }
-      case 1:
-      case 3:
-      case 7:
-      case 9: {
-        return 'corner';
-      }
-      case 2:
-      case 4:
-      case 6:
-      case 8: {
-        return 'edge';
-      }
-    }
-  }
-
-  /** returns an array with the id and the value of the next move
-   * @param {Number} selectedField - the value of the selected field
-   * @return {Array} - array with the id and the value of the field of next move
-   */
-  function getNextMoveParameters(selectedField) {
-    switch (selectedField) {
-      case 1: {
-        return ['field-one', selectedField];
-      }
-      case 2: {
-        return ['field-two', selectedField];
-      }
-      case 3: {
-        return ['field-three', selectedField];
-      }
-      case 4: {
-        return ['field-four', selectedField];
-      }
-      case 5: {
-        return ['field-five', selectedField];
-      }
-      case 6: {
-        return ['field-six', selectedField];
-      }
-      case 7: {
-        return ['field-seven', selectedField];
-      }
-      case 8: {
-        return ['field-eight', selectedField];
-      }
-      case 9: {
-        return ['field-nine', selectedField];
-      }
-      default: {
-        console.log('ERROR! A NON EXPECTED VALUE HAS BEEN SELECTED!');
-        break;
-      }
-    }
-  }
-
-  return getNextMove();
 }
