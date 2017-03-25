@@ -238,24 +238,5 @@
 function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) {
   const remainingFields = notUsedFields.length;
 
-  /** gets the next move of the ai
-   * @return {Array} - array with the id and the value of the field of the next move
-   */
-  function getNextMove() {
-    switch (remainingFields) {
-      case 9: {
-        return firstMove();
-      }
-      case 8: {
-        return secondMove();
-      }
-      case 7: {
-        return thirdMove();
-      }
-      default: {
-        console.log('Fail!');
-        break;
-      }
-    }
-  }
+
 }
