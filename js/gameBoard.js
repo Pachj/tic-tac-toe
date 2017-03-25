@@ -59,9 +59,9 @@
 
     const actualId = `#${id}`;
     // display the symbol of the actual player in the selected button
-    if ($(actualId).html().length === 0) { // ToDo: could be removed
+    //if ($(actualId).html().length === 0) { // ToDo: could be removed
       $(actualId).html(`<i class='${actualPlayer.symbol}'></i>`);
-    }
+    //}
 
     // removes the actual input from the not used fields
     function removeFromNotUsed() {
@@ -230,13 +230,58 @@
   });
 }());
 
+
 /**
  * @param {Array} player1 - All fields of the player
  * @param {Array} player2 - All fields of the AI
  * @param {Array} notUsedFields - All fields who aren't used *
  */
 function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) {
-  const remainingFields = notUsedFields.length;
+  let board = [];
+  $(".game-field").each(function(ix, field) {
+      if( $(field).children(".fa-circle-o").length > 0) {
+        board.push("o");
+      } else if ( $(field).children(".fa-times").length > 0) {
+        board.push("x");
+      }
+      else {
+        board.push("e");
+      }
+  });
+  console.log("Board read back: " + board.toString());
 
+  let state = new gameState(board, player2.symbol);
+  const value = getMove(state) + 1;
+  let id;
 
+  switch (value) {
+    case 1:
+      id = 'field-one';
+      break;
+    case 2:
+      id = 'field-two';
+      break;
+    case 3:
+      id = 'field-three';
+      break;
+    case 4:
+      id = 'field- four';
+      break;
+    case 5:
+      id = 'field-five';
+      break;
+    case 6:
+      id = 'field-six';
+      break;
+    case 7:
+      id = 'field-seven';
+      break;
+    case 8:
+      id = 'field-eight';
+      break;
+    case 9:
+      id = 'field-nine';
+      break;
+  }
+  return [id, value];
 }
