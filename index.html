@@ -39,5 +39,16 @@
         </div>
     </div>
 </div>
+<script>
+  // check winning condition
+  let board = ['x', 'x', 'e', 'o', 'e', 'e', 'e', 'e', 'e'];
+  let myState = new gameState(board, 'x');
+  myState.checkActualPlayerHasWon();
+
+  //let board = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'];
+//let board = ['x', 'x', 'e', 'o', 'e', 'e', 'e', 'e', 'e'];
+//let board = ['e', 'e'];
+let state = new gameState(board, 'x');
+  getMove(state)</script>
 </body>
 </html>
