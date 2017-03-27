@@ -79,6 +79,8 @@
 
       if (checkActualPlayerHasWon()) {
 
+      } else if (checkGameFinished()) {
+        console.log('FINISHED!');
       }
       actualPlayer = actualPlayer === player1 ? player2 : player1;
     }
@@ -89,6 +91,9 @@
     }
   }
 
+  /** display the given move
+   * @param {Number} field - the selected field
+   */
   function displayMove(field) {
     const selector = '#' + field;
     $(selector).html('<i class=\"' + actualPlayer.symbolForDisplay + '\"></i>');
@@ -120,6 +125,18 @@
       }
     }
     return false;
+  }
+
+  /** checks if the game is finished
+   * @return {Boolean} whether the game is finished
+   */
+  function checkGameFinished() {
+    for (let i = 0; i < board.length; i++) {
+      if (board[i] === 'e') {
+        return false;
+      }
+    }
+    return true;
   }
 }());
 
