@@ -13,10 +13,10 @@
     symbolForDisplay: undefined,
   };
 
-  const isSinglePlayer = true;
+  let isSinglePlayer = true;
 
   // which player can make the first move in the round
-  let player1HasFirstMove = false;
+  let player1HasFirstMove = true;
 
   let actualPlayer = player1HasFirstMove === true ? player1 : player2;
 
@@ -25,7 +25,7 @@
   /** choose the selected symbol for player1 and the opposite for player2
    * @param {String} selectedSymbol - the id of the selected button
    */
-  function chooseSymbol(selectedSymbol) { //ToDo: rename
+  function chooseSymbol(selectedSymbol) { //ToDo: rename ToDo: other location
     const cross = 'fa fa-times';
     const circle = 'fa fa-circle-o';
 
@@ -46,7 +46,13 @@
   }
 
   $(document).ready(() => { // ToDo: move to the bottom
-    $('#choose-symbol').css('display', 'block');
+    $('#mode-selection').css('display', 'block');
+    $('#singleplayer, #multiplayer').click(function() {
+      isSinglePlayer = this.id === 'singleplayer';
+      $('#mode-selection').css('display', 'none');
+      $('#choose-symbol').css('display', 'block');
+    });
+
     $('#cross, #circle').click(function() {
       chooseSymbol(this.id);
 
