@@ -76,6 +76,10 @@
     if (board[selectedField] === 'e') {
       board[selectedField] = actualPlayer.symbol;
       displayMove(selectedField);
+
+      if (checkActualPlayerHasWon()) {
+
+      }
       actualPlayer = actualPlayer === player1 ? player2 : player1;
     }
 
@@ -88,6 +92,32 @@
   function displayMove(field) {
     const selector = '#' + field;
     $(selector).html('<i class=\"' + actualPlayer.symbolForDisplay + '\"></i>');
+  }
+
+  // checks if someone has won
+  function checkActualPlayerHasWon() {
+    const winningConditions = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+
+    let checkActualCondition = (condition) => {
+      if (board[condition[0]] === actualPlayer.symbol) {
+        if (board[condition[1]] === actualPlayer.symbol) {
+          if (board[condition[2]] === actualPlayer.symbol) {
+            return true;
+          }
+        }
+        return false;
+      }
+    };
+
+    for (let i = 0; i < winningConditions.length; i++) {
+      if (checkActualCondition(winningConditions[i])) {
+        console.log('WON!');
+        return true;
+      }
+    }
+    return false;
   }
 }());
 
