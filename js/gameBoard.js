@@ -76,6 +76,11 @@
     if (board[selectedField] === 'e') {
       board[selectedField] = actualPlayer.symbol;
       displayMove(selectedField);
+      actualPlayer = actualPlayer === player1 ? player2 : player1;
+    }
+
+    if (isSinglePlayer && actualPlayer === player2) {
+      gameController(newAiMove(board, actualPlayer.symbol));
     }
   }
 
