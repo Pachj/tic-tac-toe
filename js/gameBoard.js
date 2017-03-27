@@ -3,9 +3,7 @@
  */
 
 /** ToDo: add 2 player mode
- * ToDo: change show()/hide() anchor
- * ToDo: import from ai.js
- * ToDo: delete brackets from the cases without a declaration
+ * ToDo: change show()/hide() anchor *
  */
 
 /* import newAiMove from './ai';*/ // ToDo: other way for import
@@ -250,7 +248,7 @@ function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) {
   });
   console.log("Board read back: " + board.toString());
 
-  let state = new gameState(board, player2.symbol);
+  let state = new GameState(board, player2.symbol);
   const value = getMove(state) + 1;
   let id;
 
