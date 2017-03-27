@@ -46,6 +46,9 @@
   }
 
   $(document).ready(() => { // ToDo: move to the bottom
+    // disable the game-field buttons
+    enableOrDisableButtons();
+
     $('#mode-selection').css('display', 'block');
     // click handler for the mode buttons
     $('#singleplayer, #multiplayer').click(function() {
@@ -53,6 +56,7 @@
       $('#mode-selection').css('display', 'none');
       $('#choose-symbol').css('display', 'block');
     });
+
     // click handler for the symbol buttons
     $('#cross, #circle').click(function() {
       chooseSymbol(this.id);
@@ -61,8 +65,11 @@
       if (isSinglePlayer && actualPlayer === player2) {
         let aiMove = newAiMove(board, actualPlayer.symbol);
         gameController(aiMove);
+      } else {
+        enableOrDisableButtons();
       }
     });
+
     // click handler for the game-fields
     $('.game-field').click(function() {
       gameController(this.id);
@@ -79,19 +86,30 @@
     if (board[selectedField] === 'e') {
       board[selectedField] = actualPlayer.symbol;
       displayMove(selectedField);
-    }
 
-    if (checkActualPlayerHasWon()) {
-      endTheGame(true);
-    } else if (checkGameFinished()) {
-      endTheGame(false);
-    } else {
-      actualPlayer = actualPlayer === player1 ? player2 : player1;
+      if (checkActualPlayerHasWon()) {
+        endTheGame(true);
+      } else if (checkGameFinished()) {
+        endTheGame(false);
+      } else {
+        actualPlayer = actualPlayer === player1 ? player2 : player1;
 
-      // checks if the ai is the player who can make a move --> create a new move
-      if (isSinglePlayer && actualPlayer === player2) {
-        gameController(newAiMove(board, actualPlayer.symbol));
+        // checks if the ai is the player who can make a move --> create a new move
+        if (isSinglePlayer && actualPlayer === player2) {
+          gameController(newAiMove(board, actualPlayer.symbol));
+        }
       }
+    } else {
+
+    }
+  }
+
+  function enableOrDisableButtons() {
+    const buttonsSelector = $('.game-field');
+    if (!buttonsSelector.prop('disabled')) {
+      buttonsSelector.prop('disabled', true);
+    } else {
+      buttonsSelector.prop('disabled', false);
     }
   }
 
