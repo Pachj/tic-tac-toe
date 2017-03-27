@@ -47,12 +47,13 @@
 
   $(document).ready(() => { // ToDo: move to the bottom
     $('#mode-selection').css('display', 'block');
+    // click handler for the mode buttons
     $('#singleplayer, #multiplayer').click(function() {
       isSinglePlayer = this.id === 'singleplayer';
       $('#mode-selection').css('display', 'none');
       $('#choose-symbol').css('display', 'block');
     });
-
+    // click handler for the symbol buttons
     $('#cross, #circle').click(function() {
       chooseSymbol(this.id);
 
@@ -62,7 +63,7 @@
         gameController(aiMove);
       }
     });
-
+    // click handler for the game-fields
     $('.game-field').click(function() {
       gameController(this.id);
     });
