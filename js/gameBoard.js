@@ -12,16 +12,15 @@
     symbol: undefined,
     symbolForDisplay: undefined,
   };
-
+  // whether its a singleplayer game
   let isSinglePlayer = true;
-
-  // which player can make the first move in the round
+  // whether player1 can make the first move
   let player1HasFirstMove = true;
-
+  // the player who can make a move
   let actualPlayer = player1HasFirstMove === true ? player1 : player2;
-
   let board = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'];
 
+  // enables or disables the .game-field buttons
   function enableOrDisableButtons() {
     const buttonsSelector = $('.game-field');
     if (!buttonsSelector.prop('disabled')) {
@@ -177,7 +176,7 @@
   /** choose the selected symbol for player1 and the opposite for player2
    * @param {String} selectedSymbol - the id of the selected button
    */
-  function applySymbol(selectedSymbol) { //ToDo: other location
+  function applySymbol(selectedSymbol) {
     const cross = 'fa fa-times';
     const circle = 'fa fa-circle-o';
 
@@ -194,7 +193,7 @@
     }
   }
 
-  $(document).ready(() => { // ToDo: move to the bottom
+  $(document).ready(() => {
     // disable the game-field buttons
     enableOrDisableButtons();
 
