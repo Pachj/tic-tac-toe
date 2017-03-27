@@ -22,86 +22,6 @@
 
   let board = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'];
 
-  /** choose the selected symbol for player1 and the opposite for player2
-   * @param {String} selectedSymbol - the id of the selected button
-   */
-  function chooseSymbol(selectedSymbol) { //ToDo: rename ToDo: other location
-    const cross = 'fa fa-times';
-    const circle = 'fa fa-circle-o';
-
-    if (selectedSymbol === 'cross') {
-      player1.symbol = 'x';
-      player1.symbolForDisplay = cross;
-      player2.symbol = 'o';
-      player2.symbolForDisplay = circle;
-    } else if (selectedSymbol === 'circle') {
-      player1.symbol = 'o';
-      player1.symbolForDisplay = circle;
-      player2.symbol = 'x';
-      player2.symbolForDisplay = cross;
-    }
-  }
-
-  $(document).ready(() => { // ToDo: move to the bottom
-    // disable the game-field buttons
-    enableOrDisableButtons();
-
-    $('#mode-selection').css('display', 'block');
-    // click handler for the mode buttons
-    $('#singleplayer, #multiplayer').click(function() {
-      isSinglePlayer = this.id === 'singleplayer';
-      $('#mode-selection').hide('slow');
-      $('#choose-symbol').show('slow');
-    });
-
-    // click handler for the symbol buttons
-    $('#cross, #circle').click(function() {
-      chooseSymbol(this.id);
-      $('#choose-symbol').hide('slow');
-
-      // if the ai has the first move --> get an ai move
-      if (isSinglePlayer && actualPlayer === player2) {
-        let aiMove = newAiMove(board, actualPlayer.symbol);
-        gameController(aiMove);
-      } else {
-        enableOrDisableButtons();
-      }
-    });
-
-    // click handler for the game-fields
-    $('.game-field').click(function() {
-      gameController(this.id);
-    });
-  });
-
-  /** controls the game functionality
-   * @param {String} field - the selected field
-   */
-  function gameController(field) {
-    const selectedField = parseInt(field);
-
-    // checks if the field is empty --> add the selected field
-    if (board[selectedField] === 'e') {
-      board[selectedField] = actualPlayer.symbol;
-      displayMove(selectedField);
-
-      if (checkActualPlayerHasWon()) {
-        endTheGame(true);
-      } else if (checkGameFinished()) {
-        endTheGame(false);
-      } else {
-        actualPlayer = actualPlayer === player1 ? player2 : player1;
-
-        // checks if the ai is the player who can make a move --> create a new move
-        if (isSinglePlayer && actualPlayer === player2) {
-          gameController(newAiMove(board, actualPlayer.symbol));
-        }
-      }
-    } else {
-
-    }
-  }
-
   function enableOrDisableButtons() {
     const buttonsSelector = $('.game-field');
     if (!buttonsSelector.prop('disabled')) {
@@ -215,14 +135,94 @@
     }
     return true;
   }
-}());
 
-/** creates a new ai move
- * @param {Array} board - the actual board
- * @param {String} symbol - the symbol of the ai
- * @return {String} the field who the ai has selected
- */
-function newAiMove(board, symbol) {
-  let state = new GameState(board, symbol);
-  return getMove(state);
-}
+  /** creates a new ai move
+   * @param {Array} board - the actual board
+   * @param {String} symbol - the symbol of the ai
+   * @return {String} the field who the ai has selected
+   */
+  function newAiMove(board, symbol) {
+    let state = new GameState(board, symbol);
+    return getMove(state);
+  }
+
+  /** controls the game functionality
+   * @param {String} field - the selected field
+   */
+  function gameController(field) {
+    const selectedField = parseInt(field);
+
+    // checks if the field is empty --> add the selected field
+    if (board[selectedField] === 'e') {
+      board[selectedField] = actualPlayer.symbol;
+      displayMove(selectedField);
+
+      if (checkActualPlayerHasWon()) {
+        endTheGame(true);
+      } else if (checkGameFinished()) {
+        endTheGame(false);
+      } else {
+        actualPlayer = actualPlayer === player1 ? player2 : player1;
+
+        // checks if the ai is the player who can make a move --> create a new move
+        if (isSinglePlayer && actualPlayer === player2) {
+          gameController(newAiMove(board, actualPlayer.symbol));
+        }
+      }
+    } else {
+
+    }
+  }
+
+  /** choose the selected symbol for player1 and the opposite for player2
+   * @param {String} selectedSymbol - the id of the selected button
+   */
+  function applySymbol(selectedSymbol) { //ToDo: other location
+    const cross = 'fa fa-times';
+    const circle = 'fa fa-circle-o';
+
+    if (selectedSymbol === 'cross') {
+      player1.symbol = 'x';
+      player1.symbolForDisplay = cross;
+      player2.symbol = 'o';
+      player2.symbolForDisplay = circle;
+    } else if (selectedSymbol === 'circle') {
+      player1.symbol = 'o';
+      player1.symbolForDisplay = circle;
+      player2.symbol = 'x';
+      player2.symbolForDisplay = cross;
+    }
+  }
+
+  $(document).ready(() => { // ToDo: move to the bottom
+    // disable the game-field buttons
+    enableOrDisableButtons();
+
+    $('#mode-selection').css('display', 'block');
+    // click handler for the mode buttons
+    $('#singleplayer, #multiplayer').click(function() {
+      isSinglePlayer = this.id === 'singleplayer';
+      $('#mode-selection').hide('slow');
+      $('#choose-symbol').show('slow');
+    });
+
+    // click handler for the symbol buttons
+    $('#cross, #circle').click(function() {
+      applySymbol(this.id);
+      $('#choose-symbol').hide('slow');
+
+      // if the ai has the first move --> get an ai move
+      if (isSinglePlayer && actualPlayer === player2) {
+        let aiMove = newAiMove(board, actualPlayer.symbol);
+        gameController(aiMove);
+      } else {
+        enableOrDisableButtons();
+      }
+    });
+
+    // click handler for the game-fields
+    $('.game-field').click(function() {
+      gameController(this.id);
+    });
+  });
+}());
