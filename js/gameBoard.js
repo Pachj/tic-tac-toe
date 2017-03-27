@@ -94,7 +94,9 @@
     $(selector).html('<i class=\"' + actualPlayer.symbolForDisplay + '\"></i>');
   }
 
-  // checks if someone has won
+  /** checks if the actualPlayer has won
+   * @return {Boolean} whether someone has won
+   */
   function checkActualPlayerHasWon() {
     const winningConditions = [
       [0, 1, 2], [3, 4, 5], [6, 7, 8],
