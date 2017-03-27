@@ -73,23 +73,23 @@
   function gameController(field) {
     const selectedField = parseInt(field);
 
-    // checks if the field is empty
+    // checks if the field is empty --> add the selected field
     if (board[selectedField] === 'e') {
       board[selectedField] = actualPlayer.symbol;
       displayMove(selectedField);
-
-      if (checkActualPlayerHasWon()) {
-        endTheGame(true);
-      } else if (checkGameFinished()) {
-        endTheGame(false);
-      } else {
-        actualPlayer = actualPlayer === player1 ? player2 : player1;
-      }
     }
 
-    // checks if the ai is the player who can make a move --> create a new move
-    if (isSinglePlayer && actualPlayer === player2) { // ToDo: else if?
-      gameController(newAiMove(board, actualPlayer.symbol));
+    if (checkActualPlayerHasWon()) {
+      endTheGame(true);
+    } else if (checkGameFinished()) {
+      endTheGame(false);
+    } else {
+      actualPlayer = actualPlayer === player1 ? player2 : player1;
+
+      // checks if the ai is the player who can make a move --> create a new move
+      if (isSinglePlayer && actualPlayer === player2) {
+        gameController(newAiMove(board, actualPlayer.symbol));
+      }
     }
   }
 
@@ -124,7 +124,7 @@
           }
         } else {
           endScreenSelector.children('h1').
-              html('Nobody has won. Its a draw');
+              html('Nobody has won. Its a draw.');
         }
       }
 
@@ -147,6 +147,11 @@
     board = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'];
     player1HasFirstMove = !player1HasFirstMove;
     actualPlayer = player1HasFirstMove === true ? player1 : player2;
+
+    if (isSinglePlayer && actualPlayer === player2) {
+      const aiMove = newAiMove(board, player2.symbol);
+      gameController(aiMove);
+    }
   }
 
   /** checks if the actualPlayer has won
