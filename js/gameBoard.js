@@ -79,6 +79,7 @@
       actualPlayer = actualPlayer === player1 ? player2 : player1;
     }
 
+    // checks if the ai is the player who can make a move --> create a new move
     if (isSinglePlayer && actualPlayer === player2) {
       gameController(newAiMove(board, actualPlayer.symbol));
     }
