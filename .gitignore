@@ -3,6 +3,12 @@
 
 *.iml
 
+<<<<<<< HEAD
+notes.todo
+
+TicTacToe.mdj
+=======
 *.todo
 
 *.mdj
+>>>>>>> backup-first-version

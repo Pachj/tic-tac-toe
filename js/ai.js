@@ -1,5 +1,5 @@
 /**
- * Created by Henry on 07.03.17.
+ * Created by Henry on 13.03.17.
  */
 class GameState {
   constructor(board, actualPlayer) {
@@ -7,7 +7,7 @@ class GameState {
     this.actualPlayer = actualPlayer;
     this.currentDepth = 0;
   }
-
+  
   clone() {
     let newGameState = new GameState(this.board.slice(0), this.actualPlayer);
     newGameState.currentDepth = this.currentDepth + 1;
