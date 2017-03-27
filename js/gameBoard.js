@@ -3,7 +3,8 @@
  */
 
 /** ToDo: add 2 player mode
- * ToDo: change show()/hide() anchor *
+ * ToDo: change show()/hide() anchor
+ * ToDo: change the h1's to p's
  */
 
 (function() {
@@ -29,7 +30,7 @@
 
   /** choose the selected symbol for player1 and the opposite for player2
    * @param {String} selectedSymbol - the id of the selected button*/
-  function chooseSymbol(selectedSymbol) {
+  function chooseSymbol(selectedSymbol) { //ToDo: rename
     const cross = 'fa fa-times';
     const circle = 'fa fa-circle-o';
 
@@ -46,10 +47,10 @@
     }
 
     // hide the symbol selecting screen
-    $('#choose-symbol').hide('slow');
+    $('#choose-symbol').hide('slow'); // ToDo: move to document.ready
   }
 
-  $(document).ready(() => {
+  $(document).ready(() => { // ToDo: move to the bottom
     $('#choose-symbol').css('display', 'block');
     $('#cross, #circle').click(function() {
       chooseSymbol(this.id);
@@ -78,15 +79,16 @@
       displayMove(selectedField);
 
       if (checkActualPlayerHasWon()) {
-
+        endTheGame(true);
       } else if (checkGameFinished()) {
-        console.log('FINISHED!');
+        endTheGame(false);
+      } else {
+        actualPlayer = actualPlayer === player1 ? player2 : player1;
       }
-      actualPlayer = actualPlayer === player1 ? player2 : player1;
     }
 
     // checks if the ai is the player who can make a move --> create a new move
-    if (isSinglePlayer && actualPlayer === player2) {
+    if (isSinglePlayer && actualPlayer === player2) { // ToDo: else if?
       gameController(newAiMove(board, actualPlayer.symbol));
     }
   }
@@ -97,6 +99,54 @@
   function displayMove(field) {
     const selector = '#' + field;
     $(selector).html('<i class=\"' + actualPlayer.symbolForDisplay + '\"></i>');
+  }
+
+  function endTheGame(hasWinner) {
+    (function showEndScreen() {
+      const endScreenSelector = $('#result-screen');
+
+      function changeTheResult() {
+        if (hasWinner) {
+          if (isSinglePlayer) {
+            if (actualPlayer === player1) {
+              endScreenSelector.children('h1').html('You are the winner!');
+            } else {
+              endScreenSelector.children('h1').html('The ai is the winner.');
+            }
+          } else {
+            if (actualPlayer.symbol === 'x') {
+              endScreenSelector.children('h1').
+                  html('The player with the X has won.');
+            } else {
+              endScreenSelector.children('h1').
+                  html('The player with the O has won.');
+            }
+          }
+        } else {
+          endScreenSelector.children('h1').
+              html('Nobody has won. Its a draw');
+        }
+      }
+
+      changeTheResult();
+      endScreenSelector.show('slow');
+
+      function hideEndScreen() {
+        endScreenSelector.hide('slow');
+      }
+
+      setTimeout(hideEndScreen, 3000);
+    })();
+
+    (function clearTheBoard() {
+      $('.game-field').each(function(index, field) {
+        $(field).html('');
+      });
+    })();
+
+    board = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'];
+    player1HasFirstMove = !player1HasFirstMove;
+    actualPlayer = player1HasFirstMove === true ? player1 : player2;
   }
 
   /** checks if the actualPlayer has won
