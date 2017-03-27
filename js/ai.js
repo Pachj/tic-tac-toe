@@ -1,22 +1,15 @@
 /**
  * Created by Henry on 13.03.17.
  */
-<<<<<<< HEAD
-
-class Ai extends Player {
-  constructor(symbol) {
-    super(symbol);
-  }
-=======
-class gameState {
+class GameState {
   constructor(board, actualPlayer) {
     this.board = board;
     this.actualPlayer = actualPlayer;
     this.currentDepth = 0;
   }
-
+  
   clone() {
-    let newGameState = new gameState(this.board.slice(0), this.actualPlayer);
+    let newGameState = new GameState(this.board.slice(0), this.actualPlayer);
     newGameState.currentDepth = this.currentDepth + 1;
     return newGameState;
   }
@@ -69,14 +62,14 @@ class gameState {
 
 function getMinimax(gameState) {
   let minimaxValueOfActualState;
-  /*console.log('#' + gameState.currentDepth + ' actualState: ' +
-   gameState.board.toString() + ' actualPlayer: ' +
-   gameState.actualPlayer.toString());*/
+  /*console.log('#' + GameState.currentDepth + ' actualState: ' +
+   GameState.board.toString() + ' actualPlayer: ' +
+   GameState.actualPlayer.toString());*/
 
   // checks if the actualPlayer has won
   if (gameState.checkActualPlayerHasWon()) {
-    /*console.log('#' + gameState.currentDepth + ' player has won: ' +
-     gameState.actualPlayer);*/
+    /*console.log('#' + GameState.currentDepth + ' player has won: ' +
+     GameState.actualPlayer);*/
 
     minimaxValueOfActualState = gameState.actualPlayer === 'x' ?
         (10 - gameState.currentDepth) :
@@ -87,7 +80,7 @@ function getMinimax(gameState) {
 
     // checks if no empty fields are left
     if (emptyFields.length === 0) {
-      /*console.log('#' + gameState.currentDepth + ' patt!');*/
+      /*console.log('#' + GameState.currentDepth + ' patt!');*/
       minimaxValueOfActualState = 0;
     } else {
 
@@ -119,8 +112,8 @@ function getMinimax(gameState) {
           }
         }
       });
-      /*console.log('#' + gameState.currentDepth + ' actualPlayer: ' +
-       gameState.actualPlayer + ' BestMove: ' + bestMove + ' minmaxValue: ' +
+      /*console.log('#' + GameState.currentDepth + ' actualPlayer: ' +
+       GameState.actualPlayer + ' BestMove: ' + bestMove + ' minmaxValue: ' +
        badestMinMaxValueForActualPlayer);*/
       minimaxValueOfActualState = badestMinMaxValueForActualPlayer;
     }
@@ -160,5 +153,4 @@ function getMove(gameState) {
       badestMinMaxValueForActualPlayer);
 
   return bestMove;
->>>>>>> backup-first-version
 }

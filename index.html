@@ -15,46 +15,36 @@
     <script src="js/controller.js"></script>
 </head>
 <body>
+<div class="pop-in-screen" id="mode-selection">
+    <button id="singleplayer">Singleplayer</button>
+    <button id="multiplayer">Multiplayer</button>
+</div>
 <div class="pop-in-screen" id="choose-symbol"> <!--ToDo: vertical and horizontal alignment-->
     <button id="cross" value="x">CROSS</button>
     <button id="circle" value="o">CIRCLE</button>
 </div>
 <div class="pop-in-screen" id="result-screen">
-    <h1></h1>
+    <p></p>
 </div>
 <!--add actual player display-->
 <div class="flex-container">
     <div class="flex-container" id="game">
         <div class="flex-container" id="first-row">
-            <button class="game-field" id="field-zero" value="0"></button>
-            <button class="game-field" id="field-one" value="1"></button>
-            <button class="game-field" id="field-two" value="2"></button>
+            <button class="game-field" id="0"></button>
+            <button class="game-field" id="1"></button>
+            <button class="game-field" id="2"></button>
         </div>
         <div class="flex-container" id="second-row">
-            <button class="game-field" id="field-three" value="3"></button>
-            <button class="game-field" id="field-four" value="4"></button>
-            <button class="game-field" id="field-five" value="5"></button>
+            <button class="game-field" id="3"></button>
+            <button class="game-field" id="4"></button>
+            <button class="game-field" id="5"></button>
         </div>
         <div class="flex-container" id="third-row">
-            <button class="game-field" id="field-six" value="6"></button>
-            <button class="game-field" id="field-seven" value="7"></button>
-            <button class="game-field" id="field-eight" value="8"></button>
+            <button class="game-field" id="6"></button>
+            <button class="game-field" id="7"></button>
+            <button class="game-field" id="8"></button>
         </div>
     </div>
 </div>
-<script>
-  // check winning condition
-  /*let board = ['x', 'x', 'e', 'o', 'e', 'e', 'e', 'e', 'e'];
-  let myState = new gameState(board, 'x');
-  myState.checkActualPlayerHasWon();*/
-
-  //let board = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'];
-  let board = ['o', 'e', 'o', 'e', 'e', 'e', 'o', 'e', 'o'];
-  //let board = ['x', 'o', 'x', 'e', 'e', 'e', 'e', 'e', 'e'];
-//let board = ['x', 'x', 'e', 'o', 'e', 'e', 'e', 'e', 'e'];
-//  let board = ['x', 'x', 'e', 'o', 'o', 'o', 'e', 'e', 'e'];
-//let board = ['e', 'e', 'e'];
-let state = new gameState(board, 'o');
-  getMove(state)</script>
 </body>
 </html>
