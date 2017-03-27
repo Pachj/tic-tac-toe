@@ -66,9 +66,13 @@
     });
   });
 
+  /** controls the game functionality
+   * @param {String} field - the selected field
+   */
   function gameController(field) {
     const selectedField = parseInt(field);
 
+    // checks if the field is empty
     if (board[selectedField] === 'e') {
       board[selectedField] = actualPlayer.symbol;
       displayMove(selectedField);
@@ -81,11 +85,14 @@
   }
 }());
 
+/** creates a new ai move
+ * @param {Array} board - the actual board
+ * @param {String} symbol - the symbol of the ai
+ * @return {String} the field who the ai has selected
+ */
 function newAiMove(board, symbol) {
   let state = new GameState(board, symbol);
-  let selectedField = getMove(state);
-
-  return selectedField;
+  return getMove(state);
 }
 
 /**
