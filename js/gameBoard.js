@@ -6,7 +6,6 @@
  * ToDo: change show()/hide() anchor *
  */
 
-/* import newAiMove from './ai';*/ // ToDo: other way for import
 (function() {
   const singlePlayer = true;
   // which player can make a move
@@ -58,7 +57,7 @@
     const actualId = `#${id}`;
     // display the symbol of the actual player in the selected button
     //if ($(actualId).html().length === 0) { // ToDo: could be removed
-      $(actualId).html(`<i class='${actualPlayer.symbol}'></i>`);
+    $(actualId).html(`<i class='${actualPlayer.symbol}'></i>`);
     //}
 
     // removes the actual input from the not used fields
@@ -83,8 +82,9 @@
     // iterate over all winning conditions
     for (let i = 0; i < winningConditions.length; i += 1) {
       // build the regExp string with the values of the current winningConditions array
-      const actualWinningCondition = `^.*${winningConditions[i][0]}.*${winningConditions[i][1]}.*${
-          winningConditions[i][2]}.*$`; // FixMe: 1, 5, 9 (diagonal) didn't return true in the RegEx (7, 5, 9, 1), if the array isn't sorted
+      const actualWinningCondition =
+          `^.*${winningConditions[i][0]}.*${winningConditions[i][1]}.*${
+              winningConditions[i][2]}.*$`; // FixMe: 1, 5, 9 (diagonal) didn't return true in the RegEx (7, 5, 9, 1), if the array isn't sorted
       // create the regExp object
       const regExp = new RegExp(actualWinningCondition, 'g');
 
@@ -155,8 +155,7 @@
     $('#result-screen').hide('slow');
   }
 
-  /**
-   * controls the whole game functionality
+  /** controls the whole game functionality
    * @param {String} id - the id of the field who has been selected
    * @param {Number} value - the value of the field who has been selected
    */
@@ -228,7 +227,6 @@
   });
 }());
 
-
 /**
  * @param {Array} player1 - All fields of the player
  * @param {Array} player2 - All fields of the AI
@@ -236,17 +234,17 @@
  */
 function newAiMove(player1HasFirstMove, player1, player2, notUsedFields) {
   let board = [];
-  $(".game-field").each(function(ix, field) {
-      if( $(field).children(".fa-circle-o").length > 0) {
-        board.push("o");
-      } else if ( $(field).children(".fa-times").length > 0) {
-        board.push("x");
-      }
-      else {
-        board.push("e");
-      }
+  $('.game-field').each(function(ix, field) {
+    if ($(field).children('.fa-circle-o').length > 0) {
+      board.push('o');
+    } else if ($(field).children('.fa-times').length > 0) {
+      board.push('x');
+    }
+    else {
+      board.push('e');
+    }
   });
-  console.log("Board read back: " + board.toString());
+  console.log('Board read back: ' + board.toString());
 
   let state = new GameState(board, player2.symbol);
   const value = getMove(state) + 1;
