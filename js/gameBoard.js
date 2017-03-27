@@ -118,7 +118,6 @@
 
     for (let i = 0; i < winningConditions.length; i++) {
       if (checkActualCondition(winningConditions[i])) {
-        console.log('WON!');
         return true;
       }
     }
