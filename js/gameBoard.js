@@ -50,21 +50,23 @@
       if (hasWinner) {
         if (isSinglePlayer) {
           if (actualPlayer === player1) {
-            endScreenSelector.children('h1').html('You are the winner!');
+            endScreenSelector.children('p').html('You are the winner!');
           } else {
-            endScreenSelector.children('h1').html('The ai is the winner.');
+            endScreenSelector.children('p').html('The ai is the winner.');
           }
         } else {
           if (actualPlayer.symbol === 'x') {
-            endScreenSelector.children('h1').
-                html('The player with the X has won.');
+            endScreenSelector.children('p').
+                html('The player with the ' + '<i class="fa fa-times"></i>' +
+                    ' has won.');
           } else {
-            endScreenSelector.children('h1').
-                html('The player with the O has won.');
+            endScreenSelector.children('p').
+                html('The player with the ' + '<i class="fa fa-circle-o"></i>' +
+                    ' has won.');
           }
         }
       } else {
-        endScreenSelector.children('h1').
+        endScreenSelector.children('p').
             html('Nobody has won. Its a draw.');
       }
 
