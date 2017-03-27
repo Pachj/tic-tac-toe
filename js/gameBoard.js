@@ -40,9 +40,6 @@
       player2.symbol = 'x';
       player2.symbolForDisplay = cross;
     }
-
-    // hide the symbol selecting screen
-    $('#choose-symbol').hide('slow'); // ToDo: move to document.ready
   }
 
   $(document).ready(() => { // ToDo: move to the bottom
@@ -53,13 +50,14 @@
     // click handler for the mode buttons
     $('#singleplayer, #multiplayer').click(function() {
       isSinglePlayer = this.id === 'singleplayer';
-      $('#mode-selection').css('display', 'none');
-      $('#choose-symbol').css('display', 'block');
+      $('#mode-selection').hide('slow');
+      $('#choose-symbol').show('slow');
     });
 
     // click handler for the symbol buttons
     $('#cross, #circle').click(function() {
       chooseSymbol(this.id);
+      $('#choose-symbol').hide('slow');
 
       // if the ai has the first move --> get an ai move
       if (isSinglePlayer && actualPlayer === player2) {
