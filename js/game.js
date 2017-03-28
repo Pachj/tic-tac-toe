@@ -20,6 +20,11 @@
   let actualPlayer = player1HasFirstMove === true ? player1 : player2;
   let board = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'];
 
+  function choosePlayerForFirstMove() {
+    player1HasFirstMove = player1.symbol === 'x';
+    actualPlayer = player1HasFirstMove ? player1 : player2;
+  }
+
   // enables or disables the .game-field buttons
   function enableOrDisableButtons() {
     const buttonsSelector = $('.game-field');
@@ -210,6 +215,7 @@
     $('#cross, #circle').click(function() {
       applySymbol(this.id);
       $('#choose-symbol').hide('slow');
+      choosePlayerForFirstMove();
 
       // if the ai has the first move --> get an ai move
       if (isSinglePlayer && actualPlayer === player2) {
