@@ -50,3 +50,7 @@ i {
     height: 312px;
     width: 312px;
 }
+
+#actual-player-symbol {
+    color: black;
+}

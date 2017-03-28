@@ -29,7 +29,7 @@
           'This is your move.' : 'The ai can make a move';
     } else {
       textForDisplay = 'The player with the ' +
-          '<i class=\"' + actualPlayer.symbolForDisplay + '\"></i>' +
+          '<i class=\"' + actualPlayer.symbolForDisplay + '\" id="actual-player-symbol"></i>' +
           ' can make a move.';
     }
     activePlayerSelector.html(textForDisplay);
