@@ -182,8 +182,6 @@
           enableButtons();
         }
       }
-    } else { // ToDo: could be removed
-
     }
   }
 

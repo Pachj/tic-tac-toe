@@ -79,8 +79,7 @@ class GameState {
   };
 }
 
-/**
- * returns the minimax value for all possible moves, its  a recursive function
+/** returns the minimax value for all possible moves, its  a recursive function
  * @param  {Object} gameState - the GameState of which the minimax Value should be calculated
  * @return {Number} the minimax value
  */
@@ -133,10 +132,9 @@ function getMinimax(gameState) {
   return minimaxValueOfActualState;
 }
 
-/**
- * returns the best move who the ai can make
+/** returns the best move who the ai can make
  * @param  {Object} gameState - the state of the actual game
- * @return {Number} the best move who the ai can make
+ * @return {String} the best move who the ai can make
  */
 function getMove(gameState) {
   const emptyFields = gameState.getEmptyFields();
