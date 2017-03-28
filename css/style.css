@@ -41,3 +41,12 @@ i {
     top: 0;
     left: 0;
 }
+
+#row {
+    flex-direction: row;
+}
+
+#actual-player-display {
+    height: 312px;
+    width: 312px;
+}
