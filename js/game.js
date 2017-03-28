@@ -25,14 +25,16 @@
     actualPlayer = player1HasFirstMove ? player1 : player2;
   }
 
-  // enables or disables the .game-field buttons
-  function enableOrDisableButtons() {
+  // disables the .game-field buttons
+  function disableButtons() {
     const buttonsSelector = $('.game-field');
-    if (!buttonsSelector.prop('disabled')) {
-      buttonsSelector.prop('disabled', true);
-    } else {
-      buttonsSelector.prop('disabled', false);
-    }
+    buttonsSelector.prop('disabled', true);
+  }
+
+  // enables the .game-field buttons
+  function enableButtons() {
+    const buttonsSelector = $('.game-field');
+    buttonsSelector.prop('disabled', false);
   }
 
   /** display the given move
@@ -97,8 +99,11 @@
 
     // gets a new ai move if the ai is the player who can make a move
     if (isSinglePlayer && actualPlayer === player2) {
+      disableButtons();
       const aiMove = newAiMove(board, player2.symbol);
       gameController(aiMove);
+    } else {
+      enableButtons();
     }
   }
 
@@ -159,6 +164,7 @@
 
     // checks if the field is empty --> add the selected field
     if (board[selectedField] === 'e') {
+      disableButtons();
       board[selectedField] = actualPlayer.symbol;
       displayMove(selectedField);
 
@@ -172,9 +178,11 @@
         // checks if the ai is the player who can make a move --> create a new move
         if (isSinglePlayer && actualPlayer === player2) {
           gameController(newAiMove(board, actualPlayer.symbol));
+        } else {
+          enableButtons();
         }
       }
-    } else {
+    } else { // ToDo: could be removed
 
     }
   }
@@ -200,9 +208,7 @@
   }
 
   $(document).ready(() => {
-    // disable the game-field buttons
-    enableOrDisableButtons();
-
+    disableButtons();
     $('#mode-selection').css('display', 'block');
     // click handler for the mode buttons
     $('#singleplayer, #multiplayer').click(function() {
@@ -222,7 +228,7 @@
         let aiMove = newAiMove(board, actualPlayer.symbol);
         gameController(aiMove);
       } else {
-        enableOrDisableButtons();
+        enableButtons();
       }
     });
 
