@@ -1,19 +1,32 @@
 /**
  * Created by Henry on 13.03.17.
  */
+// represents a certain state in the game
 class GameState {
+  /**
+   * @param {Array} board - the board as array
+   * @param {String} actualPlayer - the symbol of the actual player
+   */
   constructor(board, actualPlayer) {
     this.board = board;
     this.actualPlayer = actualPlayer;
     this.currentDepth = 0;
   }
 
+  /**
+   * clones a GameState
+   * @return {Object} a new GameState object
+   */
   clone() {
     let newGameState = new GameState(this.board.slice(0), this.actualPlayer);
     newGameState.currentDepth = this.currentDepth + 1;
     return newGameState;
   }
 
+  /**
+   * returns all empty fields on the board
+   * @return {Array} all empty fields
+   */
   getEmptyFields() {
     let emptyFields = [];
     this.board.forEach((field, index) => {
@@ -24,15 +37,21 @@ class GameState {
     return emptyFields;
   }
 
+  /**
+   * adds the given field to the board
+   * @param  {Number} field - the field who needs to be added
+   */
   applyTo(field) {
     this.board[field] = this.actualPlayer;
   }
 
+  // changes the actualPlayer to the other player
   switchPlayer() {
     this.actualPlayer = this.actualPlayer === 'x' ? 'o' : 'x';
   }
 
-  /** checks if the player who had made the new move has won
+  /**
+   * checks if the player who had made the new move has won
    * @return {Boolean} whether the player has won
    */
   checkActualPlayerHasWon() {
@@ -60,14 +79,18 @@ class GameState {
   };
 }
 
+/**
+ * returns the minimax value for all possible moves, its  a recursive function
+ * @param  {Object} gameState - the GameState of which the minimax Value should be calculated
+ * @return {Number} the minimax value
+ */
 function getMinimax(gameState) {
   let minimaxValueOfActualState;
 
   // checks if the actualPlayer has won
   if (gameState.checkActualPlayerHasWon()) {
-    minimaxValueOfActualState = gameState.actualPlayer === 'x' ?
-        (10 - gameState.currentDepth) :
-        (-10 + gameState.currentDepth);
+    minimaxValueOfActualState = gameState.actualPlayer === 'x' ? (10 -
+    gameState.currentDepth) : (-10 + gameState.currentDepth);
   } else {
     // the empty fields
     const emptyFields = gameState.getEmptyFields();
@@ -77,14 +100,13 @@ function getMinimax(gameState) {
       minimaxValueOfActualState = 0;
     } else {
 
-      // gehe in Rekursion
+      // go into recursion
 
       // switches the player
       gameState.switchPlayer();
 
       let badestMinMaxValueForActualPlayer = gameState.actualPlayer === 'x' ?
-          -10 :
-          10;
+          -10 : 10;
       let bestMove = undefined;
 
       // iterates over all empty fields
@@ -111,6 +133,11 @@ function getMinimax(gameState) {
   return minimaxValueOfActualState;
 }
 
+/**
+ * returns the best move who the ai can make
+ * @param  {Object} gameState - the state of the actual game
+ * @return {Number} the best move who the ai can make
+ */
 function getMove(gameState) {
   const emptyFields = gameState.getEmptyFields();
   let bestMove;
