@@ -20,10 +20,6 @@ body {
     height: 312px;
 }
 
-#app {
-    margin-top: 6%;
-}
-
 button {
     outline: none;
 }
@@ -59,8 +55,11 @@ i {
 }
 
 #column {
+    margin: auto;
+    height: 85vh;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 #actual-player-display {
