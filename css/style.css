@@ -42,12 +42,12 @@ i {
     left: 0;
 }
 
-#row {
-    flex-direction: row;
+#column {
+    flex-direction: column;
 }
 
 #actual-player-display {
-    height: 312px;
+    height: 40px;
     width: 312px;
 }
 
