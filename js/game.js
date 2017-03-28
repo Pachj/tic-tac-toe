@@ -20,6 +20,21 @@
   let actualPlayer = player1HasFirstMove === true ? player1 : player2;
   let board = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'];
 
+  // displays the actual player
+  function displayActualPlayer() {
+    const activePlayerSelector = $('#actual-player-display').children('h4');
+    let textForDisplay;
+    if (isSinglePlayer) {
+      textForDisplay = actualPlayer === player1 ?
+          'This is your move.' : 'The ai can make a move';
+    } else {
+      textForDisplay = 'The player with the ' +
+          '<i class=\"' + actualPlayer.symbolForDisplay + '\"></i>' +
+          ' can make a move.';
+    }
+    activePlayerSelector.html(textForDisplay);
+  }
+
   // selects the player with X as the player with the first move
   function choosePlayerForFirstMove() {
     player1HasFirstMove = player1.symbol === 'x';
@@ -175,6 +190,7 @@
         endTheGame(false);
       } else {
         actualPlayer = actualPlayer === player1 ? player2 : player1;
+        displayActualPlayer();
 
         // checks if the ai is the player who can make a move --> create a new move
         if (isSinglePlayer && actualPlayer === player2) {
@@ -221,6 +237,7 @@
       applySymbol(this.id);
       $('#choose-symbol').hide('slow');
       choosePlayerForFirstMove();
+      displayActualPlayer();
 
       // if the ai has the first move --> get an ai move
       if (isSinglePlayer && actualPlayer === player2) {
