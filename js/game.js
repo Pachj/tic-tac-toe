@@ -96,7 +96,7 @@
       endScreenSelector.show('slow');
 
       function hideEndScreen() {
-        endScreenSelector.hide('slow');
+        endScreenSelector.fadeOut('slow');
       }
 
       setTimeout(hideEndScreen, 3000);
@@ -228,14 +228,14 @@
     // click handler for the mode buttons
     $('#singleplayer, #multiplayer').click(function() {
       isSinglePlayer = this.id === 'singleplayer';
-      $('#mode-selection').hide('slow');
-      $('#choose-symbol').show('slow');
+      $('#mode-selection').fadeOut('slow');
+      $('#choose-symbol').fadeIn('slow');
     });
 
     // click handler for the symbol buttons
     $('#cross, #circle').click(function() {
       applySymbol(this.id);
-      $('#choose-symbol').hide('slow');
+      $('#choose-symbol').fadeOut('slow');
       choosePlayerForFirstMove();
       displayActualPlayer();
 
