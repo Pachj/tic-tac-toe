@@ -20,6 +20,7 @@
   let actualPlayer = player1HasFirstMove === true ? player1 : player2;
   let board = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'];
 
+  // selects the player with X as the player with the first move
   function choosePlayerForFirstMove() {
     player1HasFirstMove = player1.symbol === 'x';
     actualPlayer = player1HasFirstMove ? player1 : player2;
