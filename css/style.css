@@ -23,9 +23,9 @@ body {
 .game-field {
     height: 100px;
     width: 100px;
-
     background-color: black;
     border: 2px solid white;
+    cursor: pointer;
 }
 
 i {
