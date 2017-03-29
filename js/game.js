@@ -25,8 +25,9 @@
     const activePlayerSelector = $('#actual-player-display').children('h4');
     let textForDisplay;
     if (isSinglePlayer) {
-      textForDisplay = actualPlayer === player1 ?
-          'This is your move.' : 'The ai can make a move';
+      textForDisplay = actualPlayer === player1
+          ? 'This is your move.'
+          : 'The ai can make a move';
     } else {
       textForDisplay = 'The player with the ' +
           '<i class=\"' + actualPlayer.symbolForDisplay +
@@ -103,26 +104,32 @@
     })();
 
     // self invoking function who clears the board
-    (function clearTheBoard() {
+    function clearTheBoard() {
       $('.game-field').each(function(index, field) {
         $(field).html('');
       });
-    })();
-
-    board = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'];
-    player1HasFirstMove = !player1HasFirstMove;
-    actualPlayer = player1HasFirstMove === true ? player1 : player2;
-    $('#actual-player').html('');
-
-    // gets a new ai move if the ai is the player who can make a move
-    if (isSinglePlayer && actualPlayer === player2) {
-      disableButtons();
-      const aiMove = newAiMove(board, player2.symbol);
-      gameController(aiMove);
-    } else {
-      displayActualPlayer();
-      enableButtons();
     }
+
+    $('.game-field').children('i').fadeOut(3000);
+    window.setTimeout(clearTheBoard, 3000);
+
+    function resetAndRestart() {
+      board = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'];
+      player1HasFirstMove = !player1HasFirstMove;
+      actualPlayer = player1HasFirstMove === true ? player1 : player2;
+      $('#actual-player').html('');
+
+      // gets a new ai move if the ai is the player who can make a move
+      if (isSinglePlayer && actualPlayer === player2) {
+        disableButtons();
+        const aiMove = newAiMove(board, player2.symbol);
+        gameController(aiMove);
+      } else {
+        displayActualPlayer();
+        enableButtons();
+      }
+    }
+    window.setTimeout(resetAndRestart, 3000);
   }
 
   /** checks if the actualPlayer has won
