@@ -25,8 +25,7 @@
     const activePlayerSelector = $('#actual-player-display').children('h4');
     let textForDisplay;
     if (isSinglePlayer) {
-      textForDisplay = actualPlayer === player1
-          ? 'This is your move.'
+      textForDisplay = actualPlayer === player1 ? 'This is your move.'
           : 'The ai can make a move';
     } else {
       textForDisplay = 'The player with the ' +
@@ -59,7 +58,7 @@
    */
   function displayMove(field) {
     const selector = '#' + field;
-    $(selector).html('<i class=\"' + actualPlayer.symbolForDisplay + '\"></i>');
+    $(selector).html('<i class=\"' + actualPlayer.symbolForDisplay + '\" id="game-icon"></i>');
   }
 
   /** ends the current game and starts a new one
