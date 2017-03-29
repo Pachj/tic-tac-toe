@@ -58,7 +58,8 @@
    */
   function displayMove(field) {
     const selector = '#' + field;
-    $(selector).html('<i class=\"' + actualPlayer.symbolForDisplay + '\" id="game-icon"></i>');
+    $(selector).html('<i class=\"' + actualPlayer.symbolForDisplay +
+        '\" id="game-icon"></i>');
   }
 
   /** ends the current game and starts a new one
@@ -128,6 +129,7 @@
         enableButtons();
       }
     }
+
     window.setTimeout(resetAndRestart, 3000);
   }
 
