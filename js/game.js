@@ -112,6 +112,7 @@
     board = ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'];
     player1HasFirstMove = !player1HasFirstMove;
     actualPlayer = player1HasFirstMove === true ? player1 : player2;
+    $('#actual-player').html('');
 
     // gets a new ai move if the ai is the player who can make a move
     if (isSinglePlayer && actualPlayer === player2) {
@@ -119,6 +120,7 @@
       const aiMove = newAiMove(board, player2.symbol);
       gameController(aiMove);
     } else {
+      displayActualPlayer();
       enableButtons();
     }
   }
