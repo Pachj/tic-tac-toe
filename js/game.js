@@ -68,35 +68,35 @@
     /* Self invoking function who changes the html content in the result-screen.
      Also displays it and hides.*/
     (function showEndScreen() {
-      const endScreenSelector = $('#result-screen');
+      const endScreenSelector = $('#result');
 
       if (hasWinner) {
         if (isSinglePlayer) {
           if (actualPlayer === player1) {
-            endScreenSelector.children('p').html('You are the winner!');
+            endScreenSelector.html('You are the winner!');
           } else {
-            endScreenSelector.children('p').html('The ai is the winner.');
+            endScreenSelector.html('The ai is the winner.');
           }
         } else {
           if (actualPlayer.symbol === 'x') {
-            endScreenSelector.children('p').
+            endScreenSelector.
                 html('The player with the ' + '<i class="fa fa-times"></i>' +
                     ' has won.');
           } else {
-            endScreenSelector.children('p').
+            endScreenSelector.
                 html('The player with the ' + '<i class="fa fa-circle-o"></i>' +
                     ' has won.');
           }
         }
       } else {
-        endScreenSelector.children('p').
+        endScreenSelector.
             html('Nobody has won. Its a draw.');
       }
 
-      endScreenSelector.show('slow');
+      $('#result-screen').show('slow');
 
       function hideEndScreen() {
-        endScreenSelector.fadeOut('slow');
+        $('#result-screen').fadeOut('slow');
       }
 
       setTimeout(hideEndScreen, 3000);
